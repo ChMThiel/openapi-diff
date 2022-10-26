@@ -50,27 +50,29 @@ public class HeaderDiff extends ReferenceDiffCache<Header, ChangedHeader> {
                     && Boolean.TRUE.equals(right.getDeprecated()))
             .setStyle(!Objects.equals(left.getStyle(), right.getStyle()))
             .setExplode(getBooleanDiff(left.getExplode(), right.getExplode()));
-    builder
-        .with(
-            openApiDiff
-                .getMetadataDiff()
-                .diff(left.getDescription(), right.getDescription(), context))
-        .ifPresent(changedHeader::setDescription);
-    builder
-        .with(
-            openApiDiff
-                .getSchemaDiff()
-                .diff(left.getSchema(), right.getSchema(), context.copyWithRequired(true)))
-        .ifPresent(changedHeader::setSchema);
-    builder
-        .with(openApiDiff.getContentDiff().diff(left.getContent(), right.getContent(), context))
-        .ifPresent(changedHeader::setContent);
-    builder
-        .with(
-            openApiDiff
-                .getExtensionsDiff()
-                .diff(left.getExtensions(), right.getExtensions(), context))
-        .ifPresent(changedHeader::setExtensions);
+    // Ignore headers
+    //    builder
+    //        .with(
+    //            openApiDiff
+    //                .getMetadataDiff()
+    //                .diff(left.getDescription(), right.getDescription(), context))
+    //        .ifPresent(changedHeader::setDescription);
+    //    builder
+    //        .with(
+    //            openApiDiff
+    //                .getSchemaDiff()
+    //                .diff(left.getSchema(), right.getSchema(), context.copyWithRequired(true)))
+    //        .ifPresent(changedHeader::setSchema);
+    //    builder
+    //        .with(openApiDiff.getContentDiff().diff(left.getContent(), right.getContent(),
+    // context))
+    //        .ifPresent(changedHeader::setContent);
+    //    builder
+    //        .with(
+    //            openApiDiff
+    //                .getExtensionsDiff()
+    //                .diff(left.getExtensions(), right.getExtensions(), context))
+    //        .ifPresent(changedHeader::setExtensions);
     return builder.buildIsChanged(changedHeader);
   }
 
