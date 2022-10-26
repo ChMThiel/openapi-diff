@@ -43,7 +43,8 @@ public class PathsDiff {
     ChangedPaths changedPaths = new ChangedPaths(left, right);
     changedPaths.getIncreased().putAll(right);
 
-    left.keySet()
+    left.keySet().stream()
+        .filter(x -> !x.contains("/q/")) // no quarkus apis
         .forEach(
             (String url) -> {
               PathItem leftPath = left.get(url);
