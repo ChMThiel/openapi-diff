@@ -44,12 +44,13 @@ public class OperationDiff {
                 .getMetadataDiff()
                 .diff(oldOperation.getSummary(), newOperation.getSummary(), context))
         .ifPresent(changedOperation::setSummary);
-    builder
-        .with(
-            openApiDiff
-                .getMetadataDiff()
-                .diff(oldOperation.getDescription(), newOperation.getDescription(), context))
-        .ifPresent(changedOperation::setDescription);
+    // ignore description
+    //    builder
+    //        .with(
+    //            openApiDiff
+    //                .getMetadataDiff()
+    //                .diff(oldOperation.getDescription(), newOperation.getDescription(), context))
+    //        .ifPresent(changedOperation::setDescription);
     builder
         .with(
             openApiDiff

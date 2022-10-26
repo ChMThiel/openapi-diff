@@ -143,9 +143,9 @@ public class SchemaDiff {
     if (fromSchema.getUniqueItems() != null) {
       schema.setUniqueItems(fromSchema.getUniqueItems());
     }
-    if (fromSchema.getDescription() != null) {
-      schema.setDescription(fromSchema.getDescription());
-    }
+    //    if (fromSchema.getDescription() != null) {
+    //      schema.setDescription(fromSchema.getDescription());
+    //    }
     if (fromSchema.getFormat() != null) {
       schema.setFormat(fromSchema.getFormat());
     }

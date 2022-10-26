@@ -50,18 +50,20 @@ public class ResponseDiff extends ReferenceDiffCache<ApiResponse, ChangedRespons
 
     DeferredBuilder<Changed> builder = new DeferredBuilder<>();
     ChangedResponse changedResponse = new ChangedResponse(left, right, context);
-    builder
-        .with(
-            openApiDiff
-                .getMetadataDiff()
-                .diff(left.getDescription(), right.getDescription(), context))
-        .ifPresent(changedResponse::setDescription);
+    // ignore descriptions
+    //    builder
+    //        .with(
+    //            openApiDiff
+    //                .getMetadataDiff()
+    //                .diff(left.getDescription(), right.getDescription(), context))
+    //        .ifPresent(changedResponse::setDescription);
     builder
         .with(openApiDiff.getContentDiff().diff(left.getContent(), right.getContent(), context))
         .ifPresent(changedResponse::setContent);
-    builder
-        .with(openApiDiff.getHeadersDiff().diff(left.getHeaders(), right.getHeaders(), context))
-        .ifPresent(changedResponse::setHeaders);
+    //    builder
+    //        .with(openApiDiff.getHeadersDiff().diff(left.getHeaders(), right.getHeaders(),
+    // context))
+    //        .ifPresent(changedResponse::setHeaders);
     builder
         .with(
             openApiDiff
@@ -69,6 +71,8 @@ public class ResponseDiff extends ReferenceDiffCache<ApiResponse, ChangedRespons
                 .diff(left.getExtensions(), right.getExtensions(), context))
         .ifPresent(changedResponse::setExtensions);
 
-    return builder.buildIsChanged(changedResponse);
+    DeferredChanged<ChangedResponse> result = builder.buildIsChanged(changedResponse);
+
+    return result;
   }
 }
