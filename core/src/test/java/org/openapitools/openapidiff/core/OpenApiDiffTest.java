@@ -15,12 +15,32 @@ import org.openapitools.openapidiff.core.model.Endpoint;
 import org.openapitools.openapidiff.core.output.HtmlRender;
 import org.openapitools.openapidiff.core.output.JsonRender;
 import org.openapitools.openapidiff.core.output.MarkdownRender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenApiDiffTest {
 
   private final String OPENAPI_DOC1 = "petstore_v2_1.yaml";
   private final String OPENAPI_DOC2 = "petstore_v2_2.yaml";
   private final String OPENAPI_EMPTY_DOC = "petstore_v2_empty.yaml";
+  private static final Logger log = LoggerFactory.getLogger(OpenApiDiffTest.class);
+
+  @Test
+  public void shouldCompareSmom4_1_andRC5() throws IOException {
+    ChangedOpenApi changedOpenApi =
+        OpenApiCompare.fromLocations("openapi_4_1_org.yaml", "openapi_rc5_org.yaml");
+//        OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
+//    assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
+    String html =
+        new HtmlRender("Changelog", "http://deepoove.com/swagger-diff/stylesheets/demo.css")
+            .render(changedOpenApi);
+    final Path path = Path.of("smom_delta.html");
+    try (FileWriter fw = new FileWriter(path.toFile())) {
+      log.info("Writing to file " + path);
+      fw.write(html);
+    }
+    assertThat(path).isNotEmptyFile();
+  }
 
   @Test
   public void testEqual() {
