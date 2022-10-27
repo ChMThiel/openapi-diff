@@ -149,7 +149,7 @@ public class MarkdownRender implements Render {
             sectionTitle(
                 "What's Changed *incompatible* ("
                     + incompatible.size()
-                    + ") <a name=\"changed\"></a>"));
+                    + ") <a name=\"changedIncompatible\"></a>"));
     incompatible.stream().map(o -> getChangedOperationDescription(o, true)).forEach(sb::append);
     List<ChangedOperation> compatible =
         changedOperations.stream().filter(not(this::isIncompatible)).toList();
@@ -157,7 +157,7 @@ public class MarkdownRender implements Render {
         sectionTitle(
             "What's Changed *compatible* ("
                 + compatible.size()
-                + ") <a name=\"changedIncompatible\"></a>"));
+                + ") <a name=\"changed\"></a>"));
     compatible.stream().map(o -> getChangedOperationDescription(o, false)).forEach(sb::append);
     return sb.toString();
   }
