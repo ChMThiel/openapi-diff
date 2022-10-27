@@ -62,7 +62,7 @@ public class MarkdownRender implements Render {
                   return true;
                 })
             .toList();
-    return "## Changes in "
+    String result = "## Changes in "
         + diff.getOldSpecOpenApi().getInfo().getTitle()
         + " "
         + "from "
@@ -90,6 +90,7 @@ public class MarkdownRender implements Render {
                 + ") <a name=\"deprecated\"></a>",
             diff.getDeprecatedEndpoints())
         + listEndpoints(changedOperations);
+    return result.replaceAll("(?m)^[ \t]*\r?\n", ""); //remove empty lines
   }
 
   protected String sectionTitle(String title) {
@@ -138,10 +139,19 @@ public class MarkdownRender implements Render {
     if (parameterResult.isDifferent()) {
       details.append(titleH5("Parameters:")).append(parameters(aChangedOperation.getParameters()));
     }
+    String requiredChange = "";
+    if(aChangedOperation.getRequestBody() != null && aChangedOperation.getRequestBody().isChangeRequired()) {
+        if(Boolean.TRUE.equals(aChangedOperation.getRequestBody().getNewRequestBody().getRequired())) {
+            requiredChange = "*change to body required*\n";
+        } else {
+            requiredChange = "*change to body not required*\n";
+        }
+    }
     if (aChangedOperation.resultRequestBody().isDifferent()) {
       details
           .append(titleH5("Request:"))
           .append(metadata("Description", aChangedOperation.getRequestBody().getDescription()))
+              .append(requiredChange)
           .append(bodyContent(aChangedOperation.getRequestBody().getContent()));
     }
     if (aChangedOperation.resultApiResponses().isDifferent()) {
@@ -476,6 +486,20 @@ public class MarkdownRender implements Render {
         details.add("change to nullable");
       } else {
         details.add("change to not nullable");
+      }
+    }
+    if (!Objects.equals(schema.getOldSchema().getReadOnly(), schema.getNewSchema().getReadOnly())) {
+      if (Boolean.TRUE.equals(schema.getNewSchema().getReadOnly())) {
+        details.add("change to readOnly");
+      } else {
+        details.add("change to not readOnly");
+      }
+    }
+    if (!Objects.equals(schema.getOldSchema().getRequired(), schema.getNewSchema().getRequired())) {
+      if (Boolean.TRUE.equals(schema.getNewSchema().getRequired())) {
+        details.add("change to required");
+      } else {
+        details.add("change to not required");
       }
     }
     sb.append(

@@ -12,7 +12,7 @@ info:
   license:
     name: Commercial
     url: https://gec.io/
-  version: 5.0.0RC
+  version: RC5
 tags: []
 paths:
   /smartmom-svc/api/analysis/prediction-run/{id}/result:
@@ -43305,9 +43305,9 @@ paths:
             schema:
               type: object
               properties:
+                loggerName: {}
                 loggerLevel:
                   $ref: '#/components/schemas/LoggerLevel'
-                loggerName: {}
       responses:
         "201":
           description: Created
@@ -43887,12 +43887,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
-        value:
-          type: number
         unit:
           description: "Symbol of a unit for dimension Mass, see API /resources/gecunits/dimensions/Mass/units\
             \ for valid units."
           type: string
+        value:
+          type: number
     SmtEquipmentBookingView:
       description: "SmtEquipmentBookingView is a Join over SmtEquipmentBooking, SmtEquipment,\
         \ Part and OrganizationUnit"
@@ -45245,12 +45245,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
-        value:
-          type: number
         unit:
           description: "Symbol of a unit for dimension Length, see API /resources/gecunits/dimensions/Length/units\
             \ for valid units."
           type: string
+        value:
+          type: number
     Level3:
       enum:
       - NonScheduledUse
@@ -52306,12 +52306,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
-        value:
-          type: number
         unit:
           description: "Symbol of a unit for dimension Density, see API /resources/gecunits/dimensions/Density/units\
             \ for valid units."
           type: string
+        value:
+          type: number
     MessageGroup:
       description: Defintion of a Message Group. Updates to a MessageGroup will be
         stored in an audit-trail.
@@ -54456,12 +54456,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
-        value:
-          type: number
         unit:
           description: "Symbol of a unit for dimension Volume, see API /resources/gecunits/dimensions/Volume/units\
             \ for valid units."
           type: string
+        value:
+          type: number
     SerialunitMaterialBooking:
       description: MaterialBin setup at a setupPosition at an organizationUnit used
         to build a serialunit uploaded via a serialunitBooking.<BR>One tulple is created
@@ -56323,8 +56323,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/BookingType'
           - description: "BookingType: SERIALUNIT, WORKORDER_WORKSTEP"
-        key:
-          type: string
         maxBookDate:
           allOf:
           - $ref: '#/components/schemas/OffsetDateTime'
@@ -58846,8 +58844,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/BookingType'
           - description: "BookingType: SERIALUNIT, WORKORDER_WORKSTEP"
-        key:
-          type: string
         maxBookDate:
           allOf:
           - $ref: '#/components/schemas/OffsetDateTime'
@@ -59738,11 +59734,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
-        value:
-          type: number
         unit:
           description: Symbol of a unit.
           type: string
+        value:
+          type: number
     ExternalObject:
       description: External Object Identified via ExternalId
       type: object
@@ -60743,12 +60739,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
-        value:
-          type: number
         unit:
           description: "Symbol of a unit for dimension Area, see API /resources/gecunits/dimensions/Area/units\
             \ for valid units."
           type: string
+        value:
+          type: number
   responses:
     ResponseCodeMapping400:
       description: |-
