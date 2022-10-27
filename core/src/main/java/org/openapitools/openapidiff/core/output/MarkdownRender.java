@@ -15,7 +15,9 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.openapidiff.core.model.*;
 import org.openapitools.openapidiff.core.utils.RefPointer;
@@ -464,12 +466,21 @@ public class MarkdownRender implements Render {
     if (schema.isChangedType()) {
       type = type(schema.getOldSchema()) + " -> " + type(schema.getNewSchema());
     }
-    sb.append(
-        property(
-            deepness,
-            "Changed property" + (schema.isIncompatible() ? " *incompatible*" : ""),
+      StringJoiner details = new StringJoiner(", ", ", *", "*").setEmptyValue("");
+      if(schema.isIncompatible()) {
+          details.add("incompatible");
+      }
+      if (!Objects.equals(schema.getOldSchema().getNullable(), schema.getNewSchema().getNullable())) {
+          if(Boolean.TRUE.equals(schema.getNewSchema().getNullable())) {
+                 details.add("change to nullable");
+          }else {
+                 details.add("change to not nullable");
+          }
+      }
+    sb.append(property(deepness,
+            "Changed property",
             name,
-            type,
+            type+details.toString(),
             schema.getNewSchema().getDescription()));
     sb.append(schema(++deepness, schema));
     return sb.toString();
@@ -574,14 +585,14 @@ public class MarkdownRender implements Render {
   }
 
   protected String metadata(String beginning, String name, String metadata) {
-    if (StringUtils.isBlank(metadata)) {
+    if (!showChangedMetadata || StringUtils.isBlank(metadata)) {
       return "";
     }
     return blockquote(beginning, metadata);
   }
 
   protected String metadata(String beginning, String metadata) {
-    if (StringUtils.isBlank(metadata)) {
+    if (!showChangedMetadata || StringUtils.isBlank(metadata)) {
       return "";
     }
     return blockquote(beginning, metadata);
