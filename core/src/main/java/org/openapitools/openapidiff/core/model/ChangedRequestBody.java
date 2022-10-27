@@ -91,8 +91,8 @@ public class ChangedRequestBody implements ComposedChanged {
         && Objects.equals(oldRequestBody, that.oldRequestBody)
         && Objects.equals(newRequestBody, that.newRequestBody)
         && Objects.equals(context, that.context)
-            //TODO ignore description
-//        && Objects.equals(description, that.description)
+        // TODO ignore description
+        //        && Objects.equals(description, that.description)
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);
   }
@@ -100,9 +100,13 @@ public class ChangedRequestBody implements ComposedChanged {
   @Override
   public int hashCode() {
     return Objects.hash(
-        oldRequestBody, newRequestBody, context, changeRequired,
-//            description, 
-            content, extensions);
+        oldRequestBody,
+        newRequestBody,
+        context,
+        changeRequired,
+        //            description,
+        content,
+        extensions);
   }
 
   @java.lang.Override

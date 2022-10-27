@@ -404,8 +404,8 @@ public class ChangedSchema implements ComposedChanged {
         && Objects.equals(changedProperties, that.changedProperties)
         && Objects.equals(increasedProperties, that.increasedProperties)
         && Objects.equals(missingProperties, that.missingProperties)
-            //TODO ignore description
-//        && Objects.equals(description, that.description)
+        // TODO ignore description
+        //        && Objects.equals(description, that.description)
         && Objects.equals(required, that.required)
         && Objects.equals(enumeration, that.enumeration)
         && Objects.equals(readOnly, that.readOnly)
@@ -428,7 +428,7 @@ public class ChangedSchema implements ComposedChanged {
         increasedProperties,
         missingProperties,
         changeDeprecated,
-//        description,
+        //        description,
         changeTitle,
         required,
         changeDefault,

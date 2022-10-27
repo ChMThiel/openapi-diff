@@ -87,8 +87,8 @@ public class ChangedResponse implements ComposedChanged {
     return Objects.equals(oldApiResponse, that.oldApiResponse)
         && Objects.equals(newApiResponse, that.newApiResponse)
         && Objects.equals(context, that.context)
-            //TODO ignore description
-//        && Objects.equals(description, that.description)
+        // TODO ignore description
+        //        && Objects.equals(description, that.description)
         && Objects.equals(headers, that.headers)
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);
@@ -97,9 +97,13 @@ public class ChangedResponse implements ComposedChanged {
   @Override
   public int hashCode() {
     return Objects.hash(
-        oldApiResponse, newApiResponse, context, 
-//            description, 
-            headers, content, extensions);
+        oldApiResponse,
+        newApiResponse,
+        context,
+        //            description,
+        headers,
+        content,
+        extensions);
   }
 
   @java.lang.Override
