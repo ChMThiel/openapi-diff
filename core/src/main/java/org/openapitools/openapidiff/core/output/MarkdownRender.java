@@ -1,6 +1,7 @@
 package org.openapitools.openapidiff.core.output;
 
 import static java.lang.String.format;
+import static java.util.function.Predicate.not;
 import static org.openapitools.openapidiff.core.model.Changed.result;
 import static org.openapitools.openapidiff.core.utils.ChangedUtils.isUnchanged;
 
@@ -47,14 +48,38 @@ public class MarkdownRender implements Render {
   public String render(ChangedOpenApi diff) {
     this.diff = diff;
     this.handledSchemas.clear();
-    return listEndpoints("What's New", diff.getNewEndpoints())
-        + listEndpoints("What's Deleted", diff.getMissingEndpoints())
-        + listEndpoints("What's Deprecated", diff.getDeprecatedEndpoints())
+    return "## Changes in "
+        + diff.getOldSpecOpenApi().getInfo().getTitle()
+        + " "
+        + "from "
+        + diff.getOldSpecOpenApi().getInfo().getVersion()
+        + " "
+        + "to "
+        + diff.getNewSpecOpenApi().getInfo().getVersion()
+        + "\n"
+        + H3
+        + "Table of contents\n"
+        + "1. [What's New](#new)\n"
+        + "2. [What's Deleted](#deleted)\n"
+        + "3. [What's Deprecated](#deprecated)\n"
+        + "4. [What's Changed Incompatible](#changedIncompatible)\n"
+        + "5. [What's Changed compatible](#changed)\n"
+        + listEndpoints(
+            "What's New (" + diff.getNewEndpoints().size() + ") <a name=\"new\"></a>",
+            diff.getNewEndpoints())
+        + listEndpoints(
+            "What's Deleted (" + diff.getMissingEndpoints().size() + ") <a name=\"deleted\"></a>",
+            diff.getMissingEndpoints())
+        + listEndpoints(
+            "What's Deprecated ("
+                + diff.getDeprecatedEndpoints().size()
+                + ") <a name=\"deprecated\"></a>",
+            diff.getDeprecatedEndpoints())
         + listEndpoints(diff.getChangedOperations());
   }
 
   protected String sectionTitle(String title) {
-    return H4 + title + '\n' + HR + '\n';
+    return '\n' + HR + '\n' + H4 + title + '\n';
   }
 
   protected String listEndpoints(String title, List<Endpoint> endpoints) {
@@ -80,40 +105,60 @@ public class MarkdownRender implements Render {
     return H6 + title + '\n';
   }
 
+  boolean isIncompatible(ChangedOperation aChangedOperation) {
+    DiffResult parameterResult = result(aChangedOperation.getParameters());
+    return parameterResult.isIncompatible()
+        || aChangedOperation.resultRequestBody().isIncompatible()
+        || aChangedOperation.resultApiResponses().isIncompatible();
+  }
+
+  String getChangedOperationDescription(ChangedOperation aChangedOperation, boolean aInCompatible) {
+    DiffResult parameterResult = result(aChangedOperation.getParameters());
+    StringBuilder details =
+        new StringBuilder()
+            .append(
+                itemEndpoint(
+                    aChangedOperation.getHttpMethod().toString(),
+                    aChangedOperation.getPathUrl() + (aInCompatible ? " *incompatible*" : ""),
+                    aChangedOperation.getSummary()));
+    if (parameterResult.isDifferent()) {
+      details.append(titleH5("Parameters:")).append(parameters(aChangedOperation.getParameters()));
+    }
+    if (aChangedOperation.resultRequestBody().isDifferent()) {
+      details
+          .append(titleH5("Request:"))
+          .append(metadata("Description", aChangedOperation.getRequestBody().getDescription()))
+          .append(bodyContent(aChangedOperation.getRequestBody().getContent()));
+    }
+    if (aChangedOperation.resultApiResponses().isDifferent()) {
+      details
+          .append(titleH5("Return Type:"))
+          .append(responses(aChangedOperation.getApiResponses()));
+    }
+    return details.toString();
+  }
+
   protected String listEndpoints(List<ChangedOperation> changedOperations) {
     if (null == changedOperations || changedOperations.isEmpty()) {
       return "";
     }
-    StringBuilder sb = new StringBuilder(sectionTitle("What's Changed"));
-    changedOperations.stream()
-        .map(
-            operation -> {
-              StringBuilder details =
-                  new StringBuilder()
-                      .append(
-                          itemEndpoint(
-                              operation.getHttpMethod().toString(),
-                              operation.getPathUrl(),
-                              operation.getSummary()));
-              if (result(operation.getParameters()).isDifferent()) {
-                details
-                    .append(titleH5("Parameters:"))
-                    .append(parameters(operation.getParameters()));
-              }
-              if (operation.resultRequestBody().isDifferent()) {
-                details
-                    .append(titleH5("Request:"))
-                    .append(metadata("Description", operation.getRequestBody().getDescription()))
-                    .append(bodyContent(operation.getRequestBody().getContent()));
-              }
-              if (operation.resultApiResponses().isDifferent()) {
-                details
-                    .append(titleH5("Return Type:"))
-                    .append(responses(operation.getApiResponses()));
-              }
-              return details.toString();
-            })
-        .forEach(sb::append);
+    List<ChangedOperation> incompatible =
+        changedOperations.stream().filter(this::isIncompatible).toList();
+    StringBuilder sb =
+        new StringBuilder(
+            sectionTitle(
+                "What's Changed *incompatible* ("
+                    + incompatible.size()
+                    + ") <a name=\"changed\"></a>"));
+    incompatible.stream().map(o -> getChangedOperationDescription(o, true)).forEach(sb::append);
+    List<ChangedOperation> compatible =
+        changedOperations.stream().filter(not(this::isIncompatible)).toList();
+    sb.append(
+        sectionTitle(
+            "What's Changed *compatible* ("
+                + compatible.size()
+                + ") <a name=\"changedIncompatible\"></a>"));
+    compatible.stream().map(o -> getChangedOperationDescription(o, false)).forEach(sb::append);
     return sb.toString();
   }
 
@@ -143,7 +188,7 @@ public class MarkdownRender implements Render {
     StringBuilder sb = new StringBuilder();
     sb.append(
         this.itemResponse(
-            "Changed response",
+            "Changed response" + (response.isIncompatible() ? " *incompatible*" : ""),
             code,
             null == response.getNewApiResponse()
                 ? ""
@@ -408,7 +453,12 @@ public class MarkdownRender implements Render {
       type = type(schema.getOldSchema()) + " -> " + type(schema.getNewSchema());
     }
     sb.append(
-        property(deepness, "Changed property", name, type, schema.getNewSchema().getDescription()));
+        property(
+            deepness,
+            "Changed property" + (schema.isIncompatible() ? " *incompatible*" : ""),
+            name,
+            type,
+            schema.getNewSchema().getDescription()));
     sb.append(schema(++deepness, schema));
     return sb.toString();
   }
@@ -478,7 +528,10 @@ public class MarkdownRender implements Render {
           "Deprecated", rightParam.getName(), rightParam.getIn(), rightParam.getDescription());
     }
     return itemParameter(
-        "Changed", rightParam.getName(), rightParam.getIn(), rightParam.getDescription());
+        "Changed" + (param.isIncompatible() ? " *incompatible*" : ""),
+        rightParam.getName(),
+        rightParam.getIn(),
+        rightParam.getDescription());
   }
 
   protected String code(String string) {
