@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.3
 info:
-  title: Smart Manufacturing Operation Management Service API
+  title: Smart Manufacturing Operation Management Service API (development)
   description: "Smart Manufacturing Operation Management Service provide a REST-API\
     \ to access and modify the resources via restful API [GET, POST, PUT, DELETE,\
     \ PATCH] using the path .../api/resources/...<BR>"
@@ -12,7 +12,7 @@ info:
   license:
     name: Commercial
     url: https://gec.io/
-  version: 5.1.9-SNAPSHOT
+  version: 5.0.0RC
 tags: []
 paths:
   /smartmom-svc/api/analysis/prediction-run/{id}/result:
@@ -588,183 +588,6 @@ paths:
       - keycloak_auth:
         - smom_admin
         - smom_user
-  /smartmom-svc/api/imports/equipmentmessages:
-    post:
-      tags:
-      - mdc equipmentmessages imports (public)
-      summary: Import/Load EquipmentMessageDTO
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageImportResource_load
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EquipmentMessageDTO'
-      responses:
-        default:
-          description: |-
-            All clients using the API have to be prepared that other Http-States and failures might be reported as enlisted here.
-            ReturnCodes marked with * can occure at runtime and define no specific object.
-            All apis will return following json-body in case of an error and ResultHeader in case of warnings.
-          headers:
-            Warning:
-              description: |-
-                Additional to mapped error-codes following warning-codes are defined (see Schema 'GecWarning', field 'failure')
-                * *EQUIPMENT_MESSAGE INVALID_STATE* EquipmentMessage State is not acceptable
-                * *EQUIPMENT_MESSAGE NOT_FOUND* EquipmentMessage Object Not found
-              style: simple
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GecFailure'
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImportRTOUnidentifiableEquipmentMessageDTO'
-        "401":
-          description: Not Authorized
-        "403":
-          description: |-
-            Forbidden
-            * *FORBIDDEN** The requested Task is forbidden
-        "404":
-          description: |-
-            Not Found
-
-            * *URL_NOT_FOUND** URL Not found
-            * *NOT_FOUND** Object Not found
-        "405":
-          description: |-
-            Method Not Allowed
-
-            * *NOT_ALLOWED** Http Method not allowed for this URL
-        "406":
-          description: |-
-            Not Acceptable
-
-            * *ILLEGAL_ARGUMENT** A argument is not acceptable
-        "409":
-          description: |-
-            Conflict
-
-            * *CANNOT_BE_CREATED** Object cannot be created due missing or inconsistent data
-        "422":
-          description: |-
-            Unprocessable Entity - Import of all Import Items failed.
-            * *EQUIPMENT ID_NAME_MISMATCH* Equipment Given Id and Name, don't match to the existing name for the id in the Persistence
-            * *EQUIPMENT NOT_FOUND* Equipment Object Not found
-            * *EQUIPMENT_MESSAGE ILLEGAL_ARGUMENT* EquipmentMessage A argument is not acceptable
-            * *MESSAGE ID_NAME_MISMATCH* Message Given Id and Name, don't match to the existing name for the id in the Persistence
-            * *MESSAGE NOT_FOUND* Message Object Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImportRTOUnidentifiableEquipmentMessageDTO'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-  /smartmom-svc/api/imports/equipmentmessages/loadBulk:
-    post:
-      tags:
-      - mdc equipmentmessages imports (public)
-      summary: Import/Load EquipmentMessageDTO via BULK
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageImportResource_loadBulk
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/EquipmentMessageDTO'
-      responses:
-        default:
-          description: |-
-            All clients using the API have to be prepared that other Http-States and failures might be reported as enlisted here.
-            ReturnCodes marked with * can occure at runtime and define no specific object.
-            All apis will return following json-body in case of an error and ResultHeader in case of warnings.
-          headers:
-            Warning:
-              description: |-
-                Additional to mapped error-codes following warning-codes are defined (see Schema 'GecWarning', field 'failure')
-                * *EQUIPMENT_MESSAGE INVALID_STATE* EquipmentMessage State is not acceptable
-                * *EQUIPMENT_MESSAGE NOT_FOUND* EquipmentMessage Object Not found
-              style: simple
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GecFailure'
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImportBulkRTOUnidentifiableEquipmentMessageDTO'
-        "206":
-          description: Partial Content - Import of some Import Items failed. See Code
-            422 for possible Return-Codes.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImportBulkRTOUnidentifiableEquipmentMessageDTO'
-        "401":
-          description: Not Authorized
-        "403":
-          description: |-
-            Forbidden
-            * *FORBIDDEN** The requested Task is forbidden
-        "404":
-          description: |-
-            Not Found
-
-            * *URL_NOT_FOUND** URL Not found
-            * *NOT_FOUND** Object Not found
-        "405":
-          description: |-
-            Method Not Allowed
-
-            * *NOT_ALLOWED** Http Method not allowed for this URL
-        "406":
-          description: |-
-            Not Acceptable
-
-            * *ILLEGAL_ARGUMENT** A argument is not acceptable
-        "409":
-          description: |-
-            Conflict
-
-            * *CANNOT_BE_CREATED** Object cannot be created due missing or inconsistent data
-        "422":
-          description: |-
-            Unprocessable Entity - Import of all Import Items failed.
-            * *EQUIPMENT ID_NAME_MISMATCH* Equipment Given Id and Name, don't match to the existing name for the id in the Persistence
-            * *EQUIPMENT NOT_FOUND* Equipment Object Not found
-            * *EQUIPMENT_MESSAGE ILLEGAL_ARGUMENT* EquipmentMessage A argument is not acceptable
-            * *MESSAGE ID_NAME_MISMATCH* Message Given Id and Name, don't match to the existing name for the id in the Persistence
-            * *MESSAGE NOT_FOUND* Message Object Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImportBulkRTOUnidentifiableEquipmentMessageDTO'
-      security:
-      - keycloak_auth:
-        - mdc_admin
   /smartmom-svc/api/imports/equipments:
     post:
       tags:
@@ -3552,15 +3375,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -4058,15 +3872,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -4433,15 +4238,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -4817,15 +4613,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -5391,15 +5178,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -5883,22 +5661,6 @@ paths:
       - $ref: '#/components/parameters/X-PlantId'
       - $ref: '#/components/parameters/offset'
       - $ref: '#/components/parameters/limit'
-      - name: area
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityArea'
-            - readOnly: true
-      - name: density
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityDensity'
-            - readOnly: true
       - name: description
         in: query
         schema:
@@ -5962,14 +5724,6 @@ paths:
         in: query
         schema:
           type: boolean
-      - name: height
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: info1
         in: query
         schema:
@@ -5999,14 +5753,6 @@ paths:
             allOf:
             - $ref: '#/components/schemas/OffsetDateTime'
             - readOnly: true
-      - name: length
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: lockedState
         in: query
         schema:
@@ -6110,15 +5856,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: producerContactId
         in: query
         schema:
@@ -6178,30 +5915,6 @@ paths:
             format: int32
             type: integer
             readOnly: true
-      - name: volume
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityVolume'
-            - readOnly: true
-      - name: weight
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityMass'
-            - description: must be greater than or equal to zero
-      - name: width
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -6560,212 +6273,6 @@ paths:
       - keycloak_auth:
         - smom_admin
         - smom_user
-  /smartmom-svc/api/resources/equipments/{equipmentId}/message/{messageId}:
-    put:
-      tags:
-      - mdc equipments resources (private)
-      summary: PRIVATE API Add a Message to a Equipment
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageAssignmentResource_addMessage
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "204":
-          description: No Content
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-    delete:
-      tags:
-      - mdc equipments resources (private)
-      summary: PRIVATE API Remove a Message from a Equipment
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageAssignmentResource_removeMessage
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "204":
-          description: No Content
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-  /smartmom-svc/api/resources/equipments/{equipmentId}/messagegroup/{messageGroupId}:
-    put:
-      tags:
-      - mdc equipments resources (private)
-      summary: PRIVATE API Add all Messages of a MessageGroup to a Equipment
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageAssignmentResource_addMessageGroup
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageGroupId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "204":
-          description: No Content
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-    delete:
-      tags:
-      - mdc equipments resources (private)
-      summary: PRIVATE API Remove a Message of a MessageGroup from a Equipment
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageAssignmentResource_removeMessageGroup
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageGroupId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "204":
-          description: No Content
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
   /smartmom-svc/api/resources/equipments/{id}:
     get:
       tags:
@@ -7751,22 +7258,6 @@ paths:
       - $ref: '#/components/parameters/X-PlantId'
       - $ref: '#/components/parameters/offset'
       - $ref: '#/components/parameters/limit'
-      - name: area
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityArea'
-            - readOnly: true
-      - name: density
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityDensity'
-            - readOnly: true
       - name: description
         in: query
         schema:
@@ -7784,14 +7275,6 @@ paths:
         description: True when the Entity has documents in the DocumentSystem
         schema:
           type: boolean
-      - name: height
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: info1
         in: query
         schema:
@@ -7813,14 +7296,6 @@ paths:
           items:
             description: Info Text 3 (Updatable when released)
             type: string
-      - name: length
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: name
         in: query
         schema:
@@ -7836,15 +7311,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -7869,30 +7335,6 @@ paths:
             - $ref: '#/components/schemas/ReleaseState'
             - description: ReleaseState (set by release / archive APIs)
               readOnly: true
-      - name: volume
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityVolume'
-            - readOnly: true
-      - name: weight
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityMass'
-            - description: must be greater than or equal to zero
-      - name: width
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -8016,22 +7458,6 @@ paths:
       - $ref: '#/components/parameters/X-PlantId'
       - $ref: '#/components/parameters/offset'
       - $ref: '#/components/parameters/limit'
-      - name: area
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityArea'
-            - readOnly: true
-      - name: density
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityDensity'
-            - readOnly: true
       - name: description
         in: query
         schema:
@@ -8057,14 +7483,6 @@ paths:
         description: True when the Entity has documents in the DocumentSystem
         schema:
           type: boolean
-      - name: height
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: info1
         in: query
         schema:
@@ -8086,14 +7504,6 @@ paths:
           items:
             description: Info Text 3
             type: string
-      - name: length
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: name
         in: query
         schema:
@@ -8109,15 +7519,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: singleVarietyRequired
         in: query
         description: Single Variety Required
@@ -8140,30 +7541,6 @@ paths:
             description: Name of the StoragePlace. Is set when the Object is stored
               via Storage Service
             type: string
-      - name: volume
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityVolume'
-            - readOnly: true
-      - name: weight
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityMass'
-            - description: must be greater than or equal to zero
-      - name: width
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -9320,15 +8697,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -9973,15 +9341,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -10446,15 +9805,6 @@ paths:
           type: array
           items:
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: PlantId
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -10777,15 +10127,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -10983,15 +10324,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -11927,15 +11259,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -12406,24 +11729,6 @@ paths:
       - $ref: '#/components/parameters/X-PlantId'
       - $ref: '#/components/parameters/offset'
       - $ref: '#/components/parameters/limit'
-      - name: area
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityArea'
-            - readOnly: true
-      - name: currentQuantity
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: "Current MaterialBin Quantity. Must be given on creation,\
-                \ but should no be updated. Will be decremented by material-bookings\
-                \ only."
       - name: customerContactId
         in: query
         schema:
@@ -12432,14 +11737,6 @@ paths:
             allOf:
             - $ref: '#/components/schemas/UUID'
             - description: "Reference to the customer-contact, stored in address-service"
-      - name: density
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityDensity'
-            - readOnly: true
       - name: description
         in: query
         schema:
@@ -12464,14 +11761,6 @@ paths:
         description: True when the Entity has Attributes in the AttributeSystem
         schema:
           type: boolean
-      - name: height
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: info1
         in: query
         schema:
@@ -12512,14 +11801,6 @@ paths:
             - $ref: '#/components/schemas/OffsetDateTime'
             - description: Last BookDate a MeasurementBooking was done for the MaterialBin
               readOnly: true
-      - name: length
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - name: lockedState
         in: query
         schema:
@@ -12579,15 +11860,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: producerContactId
         in: query
         schema:
@@ -12627,38 +11899,6 @@ paths:
             allOf:
             - $ref: '#/components/schemas/UUID'
             - description: "Reference to the supplier-contact, stored in address-service"
-      - name: totalQuantity
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Total MaterialBin Quantity
-      - name: volume
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityVolume'
-            - readOnly: true
-      - name: weight
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityMass'
-            - description: must be greater than or equal to zero
-      - name: width
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/QuantityLength'
-            - description: must be greater than zero
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -14403,15 +13643,6 @@ paths:
           type: array
           items:
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: producerContactId
         in: query
         schema:
@@ -14984,15 +14215,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -15315,15 +14537,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -15646,15 +14859,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -16110,15 +15314,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: priority
         in: query
         schema:
@@ -16355,216 +15550,6 @@ paths:
           $ref: '#/components/responses/default_response'
         "204":
           description: No Content
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-  /smartmom-svc/api/resources/messages/{messageId}/equipments/{equipmentId}:
-    put:
-      tags:
-      - mdc messages resources (private)
-      summary: PRIVATE API confirm a message for a equipment
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageResource_confirm
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: confirmedInfo
-        in: query
-        schema:
-          type: string
-      - name: confirmedSince
-        in: query
-        schema:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - default: NOW
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EquipmentMessage'
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-    post:
-      tags:
-      - mdc messages resources (private)
-      summary: PRIVATE API open a message for a equipment
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageResource_open
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: actions
-        in: query
-        schema:
-          type: string
-      - name: lossFactor
-        in: query
-        description: Lost pieces per hour while the message is not closed
-        schema:
-          format: double
-          type: number
-      - name: openSince
-        in: query
-        schema:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - default: NOW
-      - name: organizationUnitName
-        in: query
-        schema:
-          type: string
-      - name: responsibleUser
-        in: query
-        schema:
-          type: string
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EquipmentMessage'
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-    delete:
-      tags:
-      - mdc messages resources (private)
-      summary: PRIVATE API close a message for a equipment
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageResource_close
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: closedInfo
-        in: query
-        schema:
-          type: string
-      - name: closedSince
-        in: query
-        schema:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - default: NOW
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EquipmentMessageHistory'
         "400":
           $ref: '#/components/responses/ResponseCodeMapping400'
         "401":
@@ -17203,15 +16188,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -20678,15 +19654,6 @@ paths:
           type: array
           items:
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: storableContainerId
         in: query
         schema:
@@ -25362,15 +24329,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -25897,15 +24855,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -26164,15 +25113,6 @@ paths:
           type: array
           items:
             $ref: '#/components/schemas/OffsetDateTime'
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: processState
         in: query
         schema:
@@ -27016,15 +25956,6 @@ paths:
             allOf:
             - $ref: '#/components/schemas/OffsetDateTime'
             - description: Planned start-date of the Workorder (Updatable when released)
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: prevProcessState
         in: query
         schema:
@@ -27069,49 +26000,12 @@ paths:
           items:
             description: Purchase Order Number (Updatable when released)
             type: string
-      - name: quantity
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Workorder Quantity must be greater than zero (Updatable
-                when released)
       - name: quantityAdjustmentMode
         in: query
         schema:
           type: array
           items:
             $ref: '#/components/schemas/WorkorderQuantityAdjustmentMode'
-      - name: quantityErp
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Inital Workorder Quantity requested from the ERP-System
-      - name: quantityFinished
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Total finished quantity booked at the last mandatory Workstep
-              readOnly: true
-      - name: quantityMax
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Calculated maximum quantity of the workorder based on quantity
-                and overbookPercentage used in finish the workorder (Updatable when
-                released)
-              readOnly: true
       - name: quantityOverbookPercentage
         in: query
         schema:
@@ -27123,34 +26017,6 @@ paths:
               up to this value before the workorder state will be set automatically
               to finished (Updatable when released)
             type: integer
-      - name: quantityScrap
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Total scrapped quantity booked at any Workstep
-              default: My Default
-              readOnly: true
-      - name: quantityScrapAdjust
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Scrap Quantity that was used to increased the workorder
-                quantity based on Scrap Adjust setting (Updatable when released)
-      - name: quantityStarted
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Total started quantity booked at the first mandatory Workstep
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -27161,15 +26027,6 @@ paths:
             - description: ReleaseDate is set when the state was switched from IN_PROCESS
                 to RELEASED
               readOnly: true
-      - name: singleQuantity
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: The Quantity of a Single Unit produced with this Workorder.
-                Needed for example to finish the Workorder on Qty-Reached
       - name: startDate
         in: query
         schema:
@@ -31286,15 +30143,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -31463,15 +30311,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -31684,15 +30523,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -31862,14 +30692,6 @@ paths:
           items:
             description: OrganizationUnit name
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: ID of the plant of this Booking
       - name: quantityBookings
         in: query
         schema:
@@ -31879,51 +30701,6 @@ paths:
             description: total number of bookings
             type: integer
             readOnly: true
-      - name: quantityFail
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum FAIL-Quantity
-              readOnly: true
-      - name: quantityFirstPass
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum FIRST-PASS-Quantity
-              readOnly: true
-      - name: quantityInProcess
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum InProcess-Quantity
-              readOnly: true
-      - name: quantityPass
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum PASS-Quantity
-              readOnly: true
-      - name: quantityScrap
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum SCRAP-Quantity
-              readOnly: true
       - name: setupTime
         in: query
         schema:
@@ -32103,14 +30880,6 @@ paths:
           items:
             description: OrganizationUnit name
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: ID of the plant of this Booking
       - name: quantityBookings
         in: query
         schema:
@@ -32120,51 +30889,6 @@ paths:
             description: total number of bookings
             type: integer
             readOnly: true
-      - name: quantityFail
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum FAIL-Quantity
-              readOnly: true
-      - name: quantityFirstPass
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum FIRST-PASS-Quantity
-              readOnly: true
-      - name: quantityInProcess
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum InProcess-Quantity
-              readOnly: true
-      - name: quantityPass
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum PASS-Quantity
-              readOnly: true
-      - name: quantityScrap
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Quantity'
-            - description: Sum SCRAP-Quantity
-              readOnly: true
       - name: setupTime
         in: query
         schema:
@@ -32467,317 +31191,6 @@ paths:
       - keycloak_auth:
         - mdc_admin
         - mdc_user
-  /smartmom-svc/api/views/equipmentmessagehistories:
-    get:
-      tags:
-      - mdc equipmentmessagehistories views (private)
-      summary: PRIVATE API get EquipmentMessageHistoryView by Filter
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-        * mdc_user
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageHistoryViewResource_readByFilter
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: closedSinceFromDate
-        in: query
-        description: "Load values that are after this date. Field: closedSince"
-        schema:
-          $ref: '#/components/schemas/OffsetDateTime'
-      - name: closedSinceToDate
-        in: query
-        description: "Load values that are before this date. Field: closedSince"
-        schema:
-          $ref: '#/components/schemas/OffsetDateTime'
-      - name: confirmedSinceFromDate
-        in: query
-        description: "Load values that are after this date. Field: confirmedSince"
-        schema:
-          $ref: '#/components/schemas/OffsetDateTime'
-      - name: confirmedSinceToDate
-        in: query
-        description: "Load values that are before this date. Field: confirmedSince"
-        schema:
-          $ref: '#/components/schemas/OffsetDateTime'
-      - name: fromDate
-        in: query
-        description: Load values that are after this date
-        required: true
-        schema:
-          $ref: '#/components/schemas/OffsetDateTime'
-      - name: greaterThanConfirmToCloseDuration
-        in: query
-        description: Filter all Entries Duration from Confirm to Close Greater Or
-          Equal
-        schema:
-          $ref: '#/components/schemas/Duration'
-      - name: greaterThanOpenToCloseDuration
-        in: query
-        description: Filter all Entries Duration from Open to Close Greater Or Equal
-        schema:
-          $ref: '#/components/schemas/Duration'
-      - name: greaterThanOpenToConfirmDuration
-        in: query
-        description: Filter all Entries Duration from Open to Confirm Greater Or Equal
-        schema:
-          $ref: '#/components/schemas/Duration'
-      - name: itemId
-        in: query
-        description: Id o a Item
-        schema:
-          type: string
-      - name: messageId
-        in: query
-        description: Id of a Message
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: messageName
-        in: query
-        description: Name of a Message
-        schema:
-          type: string
-      - name: organizationUnitId
-        in: query
-        description: Equipment Id
-        schema:
-          $ref: '#/components/schemas/UUID'
-      - name: organizationUnitName
-        in: query
-        description: Name of a Equipment
-        schema:
-          type: string
-      - name: toDate
-        in: query
-        description: Load values that are before this date
-        required: true
-        schema:
-          $ref: '#/components/schemas/OffsetDateTime'
-      - $ref: '#/components/parameters/limit'
-      - $ref: '#/components/parameters/offset'
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "200":
-          description: OK
-          headers:
-            first:
-              $ref: '#/components/headers/first'
-            prev:
-              $ref: '#/components/headers/prev'
-            next:
-              $ref: '#/components/headers/next'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/EquipmentMessageHistoryView'
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-        - mdc_user
-  /smartmom-svc/api/views/equipmentmessages:
-    get:
-      tags:
-      - mdc equipmentmessages views (private)
-      summary: PRIVATE API get EquipmentMessageView by Filter
-      description: |-
-        ### This API supports additional options for filtering and sorting.
-        Single String-parameter support wildcards. You can prefix filter-values with one of the following identifiers.
-        * *IS_NOT*: identifier '<>'
-        * *LESSER*: identifier '<'
-        * *GREATER*: identifier '>'
-
-        Values without one of this prefixes will be compared using '='. If multiple values for a '='-parameter are given, it will lead to an IN-Query for this values.
-        ### Required roles
-        * mdc_admin
-        * mdc_user
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageViewResource_readByFilter
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - $ref: '#/components/parameters/offset'
-      - $ref: '#/components/parameters/limit'
-      - name: actions
-        in: query
-        schema:
-          type: array
-          items:
-            description: Action to be done
-            type: string
-      - name: confirmedInfo
-        in: query
-        schema:
-          type: array
-          items:
-            description: Additional confirm message
-            type: string
-      - name: confirmedSince
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/OffsetDateTime'
-            - description: Message confirm-time
-      - name: confirmedUser
-        in: query
-        schema:
-          type: array
-          items:
-            description: Name of the user that confirmed the message
-            type: string
-            readOnly: true
-      - name: equipmentId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: Id of the Equipment
-      - name: lossFactor
-        in: query
-        schema:
-          type: array
-          items:
-            format: double
-            description: Lost pieces per hour while the message is not closed
-            type: number
-      - name: messageId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: Id of the Message
-      - name: messageState
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/MessageState'
-            - description: State of the message
-              readOnly: true
-      - name: openSince
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/OffsetDateTime'
-            - description: "Message open-time. May be set on creation-time of the\
-                \ message, subsequent updates are forbidden!"
-      - name: openToConfirmDuration
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Duration'
-            - description: Duration between open and confirm
-              readOnly: true
-      - name: openUser
-        in: query
-        schema:
-          type: array
-          items:
-            description: Name of the user that opened the message
-            type: string
-            readOnly: true
-      - name: organizationUnitName
-        in: query
-        schema:
-          type: array
-          items:
-            description: "Name of the OrganizationUnit, the message was sent for"
-            type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: Id of the plant
-              readOnly: true
-      - name: responsibleUser
-        in: query
-        schema:
-          type: array
-          items:
-            description: Name of the user that is responsible
-            type: string
-      - $ref: '#/components/parameters/filterQuerySortAsc'
-      - $ref: '#/components/parameters/filterQuerySortDesc'
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "200":
-          description: OK
-          headers:
-            first:
-              $ref: '#/components/headers/first'
-            prev:
-              $ref: '#/components/headers/prev'
-            next:
-              $ref: '#/components/headers/next'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/EquipmentMessageView'
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-        - mdc_user
   /smartmom-svc/api/views/equipments:
     get:
       tags:
@@ -32851,61 +31264,6 @@ paths:
       - keycloak_auth:
         - smom_admin
         - smom_user
-  /smartmom-svc/api/views/equipments/{equipmentId}/messages:
-    get:
-      tags:
-      - mdc equipments views (private)
-      summary: PRIVATE API get the MessageAssignments for the given station
-      description: |2-
-
-        ### Required roles
-        * mdc_admin
-        * mdc_user
-      operationId: io.gec.smom.mdc.message.boundary.EquipmentMessageAssignmentViewResource_readAssignments
-      parameters:
-      - $ref: '#/components/parameters/X-PlantId'
-      - name: equipmentId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
-      responses:
-        default:
-          $ref: '#/components/responses/default_response'
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MessageView'
-        "400":
-          $ref: '#/components/responses/ResponseCodeMapping400'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Forbidden
-        "404":
-          $ref: '#/components/responses/ResponseCodeMapping404'
-        "405":
-          $ref: '#/components/responses/ResponseCodeMapping405'
-        "406":
-          $ref: '#/components/responses/ResponseCodeMapping406'
-        "409":
-          $ref: '#/components/responses/ResponseCodeMapping409'
-        "412":
-          $ref: '#/components/responses/ResponseCodeMapping412'
-        "417":
-          $ref: '#/components/responses/ResponseCodeMapping417'
-        "422":
-          $ref: '#/components/responses/ResponseCodeMapping422'
-        "500":
-          $ref: '#/components/responses/ResponseCodeMapping500'
-      security:
-      - keycloak_auth:
-        - mdc_admin
-        - mdc_user
   /smartmom-svc/api/views/equipments/{id}/bookings/grouped:
     get:
       tags:
@@ -33802,15 +32160,6 @@ paths:
           items:
             description: Payload (Updatable when released)
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: releaseDate
         in: query
         schema:
@@ -34795,15 +33144,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - $ref: '#/components/parameters/filterQuerySortAsc'
       - $ref: '#/components/parameters/filterQuerySortDesc'
       responses:
@@ -35002,15 +33342,6 @@ paths:
           items:
             description: Payload
             type: string
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: "PlantId, references the plant the entity belongs to"
-              readOnly: true
       - name: priority
         in: query
         schema:
@@ -35609,15 +33940,6 @@ paths:
             allOf:
             - $ref: '#/components/schemas/UUID'
             - description: Id of the OrganizationUnit
-      - name: plantId
-        in: query
-        schema:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UUID'
-            - description: Id of the plant
-              readOnly: true
       - name: responsibleUser
         in: query
         schema:
@@ -44983,9 +43305,9 @@ paths:
             schema:
               type: object
               properties:
-                loggerName: {}
                 loggerLevel:
                   $ref: '#/components/schemas/LoggerLevel'
+                loggerName: {}
       responses:
         "201":
           description: Created
@@ -45565,12 +43887,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
+        value:
+          type: number
         unit:
           description: "Symbol of a unit for dimension Mass, see API /resources/gecunits/dimensions/Mass/units\
             \ for valid units."
           type: string
-        value:
-          type: number
     SmtEquipmentBookingView:
       description: "SmtEquipmentBookingView is a Join over SmtEquipmentBooking, SmtEquipment,\
         \ Part and OrganizationUnit"
@@ -46603,48 +44925,6 @@ components:
           type: string
         systemUnit:
           $ref: '#/components/schemas/UnitArea'
-    ImportRTOUnidentifiableEquipmentMessageDTO:
-      description: ImportResultTransferObject(RTO) Structure containing the result
-        of the Import of one Item without id
-      type: object
-      properties:
-        endTime:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: The time when the import was finished
-        failureItems:
-          description: GecFailures
-          type: array
-          items:
-            $ref: '#/components/schemas/GecFailure'
-        message:
-          description: "Additional info regarding the import, e.g. may be used to\
-            \ list the updated fields"
-          type: string
-        name:
-          description: Name of the Item that should be Imported
-          type: string
-        plantId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: "Id of the plant, the import was done for."
-        startTime:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: The time when the import was started
-        state:
-          allOf:
-          - $ref: '#/components/schemas/ImportProcessState'
-          - description: Processing State of the Import Item
-        type:
-          description: Type of the Data to Import
-          type: string
-        warnItems:
-          description: List ofGecWarnings
-          type: array
-          items:
-            $ref: '#/components/schemas/GecWarning'
-      readOnly: true
     SerialunitEquipmentBooking:
       description: Bookings for Equipments setup at an organizationUnit during a WorkorderWorkstep
         Serialunit Booking.
@@ -46965,104 +45245,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
+        value:
+          type: number
         unit:
           description: "Symbol of a unit for dimension Length, see API /resources/gecunits/dimensions/Length/units\
             \ for valid units."
-          type: string
-        value:
-          type: number
-    ImportBulkRTOUnidentifiableEquipmentMessageDTO:
-      type: object
-      properties:
-        cntAlreadyAvailable:
-          format: int32
-          description: Count of already existing Items or skipped Items
-          type: integer
-        cntCreated:
-          format: int32
-          description: Count of created Items
-          type: integer
-        cntFailed:
-          format: int32
-          description: Count of Failures during Import (Items or not imported)
-          type: integer
-        cntSkipped:
-          format: int32
-          description: Count of skipped Items
-          type: integer
-        cntTotal:
-          format: int32
-          description: Total count of processed Items
-          type: integer
-        cntUpdated:
-          format: int32
-          description: Count of updated Items
-          type: integer
-        cntWarningDuringCreation:
-          format: int32
-          description: Count of successful processed imports (created/updated) with
-            Warnings
-          type: integer
-        endTime:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: The time when the import was finished
-        importResults:
-          description: List of all Import Results
-          type: array
-          items:
-            description: ImportResultTransferObject(RTO) Structure containing the
-              result of the Import of one Item without id
-            type: object
-            properties:
-              type:
-                description: Type of the Data to Import
-                type: string
-              startTime:
-                allOf:
-                - $ref: '#/components/schemas/OffsetDateTime'
-                - description: The time when the import was started
-              endTime:
-                allOf:
-                - $ref: '#/components/schemas/OffsetDateTime'
-                - description: The time when the import was finished
-              name:
-                description: Name of the Item that should be Imported
-                type: string
-              failureItems:
-                description: GecFailures
-                type: array
-                items:
-                  $ref: '#/components/schemas/GecFailure'
-              warnItems:
-                description: List ofGecWarnings
-                type: array
-                items:
-                  $ref: '#/components/schemas/GecWarning'
-              message:
-                description: "Additional info regarding the import, e.g. may be used\
-                  \ to list the updated fields"
-                type: string
-              plantId:
-                allOf:
-                - $ref: '#/components/schemas/UUID'
-                - description: "Id of the plant, the import was done for."
-              state:
-                allOf:
-                - $ref: '#/components/schemas/ImportProcessState'
-                - description: Processing State of the Import Item
-            readOnly: true
-          nullable: false
-        startTime:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: The time when the import was started
-        totalDuration:
-          format: int64
-          description: Duration of the complete Bulk-Process in ms
-          type: integer
-        type:
-          description: Type of the Data to Import
           type: string
     Level3:
       enum:
@@ -49055,13 +47242,6 @@ components:
           - $ref: '#/components/schemas/UUID'
           - description: ID of the WorkorderWorkstepOrganizationUnitLockGroup
       readOnly: true
-    EquipmentMessagePK:
-      type: object
-      properties:
-        equipmentId:
-          $ref: '#/components/schemas/UUID'
-        messageId:
-          $ref: '#/components/schemas/UUID'
     MessageView:
       description: "MessageView contains Message, MessageClass and MessageCategory"
       type: object
@@ -49397,63 +47577,6 @@ components:
           - description: Date of last change
             readOnly: true
             example: 1970-01-01T00:00:00.0Z
-    EquipmentMessageDTO:
-      description: EquipmentMessage booking for a Equipment
-      required:
-      - equipmentName
-      - messageName
-      type: object
-      properties:
-        actions:
-          description: Action to be done
-          type: string
-        closedInfo:
-          description: Additional close message
-          type: string
-        closedSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: "Message is open since this date. If given, the message will\
-              \ be closed (must be after or equal to confirmedSince)."
-        confirmedInfo:
-          description: Additional confirm message
-          type: string
-        confirmedSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: "Message confirm-time this date. If given, the message will\
-              \ be confirmed (must be after or equal to openSince)."
-        equipmentId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Equipment(optional). Can be set if available otherwise
-              use EquipmentName instead
-        equipmentName:
-          description: "Name of the equipment, the message was sent for"
-          type: string
-        lossFactor:
-          format: double
-          description: Lost pieces per hour while the message is not closed
-          type: number
-        messageId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Message(optional). Can be set if available otherwise
-              use MessageName instead
-        messageName:
-          description: Name of the Message that should be booked
-          type: string
-        openSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: "Message is open since this date. If given, the message will\
-              \ be opened."
-        organizationUnitName:
-          description: Name of the Equipment that performes the booking
-          type: string
-        responsibleUser:
-          description: Name of the user that is responsible
-          type: string
     WarnType:
       type: object
       properties:
@@ -50115,11 +48238,11 @@ components:
     OrganizationUnitMessageHistory:
       description: History of messages of an OrganizationUnit
       required:
+      - organizationUnitId
       - messageId
       - openSince
-      - openUser
-      - organizationUnitId
       - itemId
+      - openUser
       - closedSince
       - closedUser
       - confirmToCloseDuration
@@ -50342,17 +48465,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GecWarning'
-      readOnly: true
-    EquipmentMessageHistoryView:
-      description: "EquipmentMessageHistoryView contains Message, EquipmentMessageHistory"
-      type: object
-      properties:
-        equipment:
-          $ref: '#/components/schemas/Equipment'
-        equipmentMessageHistory:
-          $ref: '#/components/schemas/EquipmentMessageHistory'
-        messageView:
-          $ref: '#/components/schemas/MessageView'
       readOnly: true
     OrganizationUnitWorkerDeregistration:
       description: "History of registered Workers at a OrganizationUnit in the past,\
@@ -52786,17 +50898,6 @@ components:
           type: string
         systemUnit:
           $ref: '#/components/schemas/UnitQuantity'
-    EquipmentMessageView:
-      description: "EquipmentMessageView contains Message, EquipmentMessage"
-      type: object
-      properties:
-        equipment:
-          $ref: '#/components/schemas/Equipment'
-        equipmentMessage:
-          $ref: '#/components/schemas/EquipmentMessage'
-        messageView:
-          $ref: '#/components/schemas/MessageView'
-      readOnly: true
     CategorizedDowntime:
       description: Downtime. Aggregated & categorized by duration
       type: object
@@ -54205,12 +52306,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
+        value:
+          type: number
         unit:
           description: "Symbol of a unit for dimension Density, see API /resources/gecunits/dimensions/Density/units\
             \ for valid units."
           type: string
-        value:
-          type: number
     MessageGroup:
       description: Defintion of a Message Group. Updates to a MessageGroup will be
         stored in an audit-trail.
@@ -56355,12 +54456,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
+        value:
+          type: number
         unit:
           description: "Symbol of a unit for dimension Volume, see API /resources/gecunits/dimensions/Volume/units\
             \ for valid units."
           type: string
-        value:
-          type: number
     SerialunitMaterialBooking:
       description: MaterialBin setup at a setupPosition at an organizationUnit used
         to build a serialunit uploaded via a serialunitBooking.<BR>One tulple is created
@@ -56662,91 +54763,6 @@ components:
           - description: Id of the WorkorderWorkstepOrganizationUnit the lock as assigned
               to
       readOnly: true
-    EquipmentMessage:
-      description: Message of an OrganizationUnit
-      required:
-      - messageId
-      - openSince
-      - openUser
-      - equipmentId
-      type: object
-      properties:
-        actions:
-          description: Action to be done
-          type: string
-        confirmedInfo:
-          description: Additional confirm message
-          type: string
-        confirmedSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Message confirm-time
-        confirmedUser:
-          description: Name of the user that confirmed the message
-          type: string
-          readOnly: true
-        created:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Date of creation
-            readOnly: true
-            example: 1970-01-01T00:00:00.0Z
-        equipmentId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Equipment
-        id:
-          $ref: '#/components/schemas/EquipmentMessagePK'
-        lossFactor:
-          format: double
-          description: Lost pieces per hour while the message is not closed
-          type: number
-        messageId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Message
-        messageState:
-          allOf:
-          - $ref: '#/components/schemas/MessageState'
-          - description: State of the message
-            readOnly: true
-        openSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: "Message open-time. May be set on creation-time of the message,\
-              \ subsequent updates are forbidden!"
-        openToConfirmDuration:
-          allOf:
-          - $ref: '#/components/schemas/Duration'
-          - description: Duration between open and confirm
-            readOnly: true
-        openUser:
-          description: Name of the user that opened the message
-          type: string
-          readOnly: true
-        organizationUnitName:
-          description: "Name of the OrganizationUnit, the message was sent for"
-          type: string
-        plantId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the plant
-            readOnly: true
-        responsibleUser:
-          description: Name of the user that is responsible
-          type: string
-        stamp:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Date of last change
-            readOnly: true
-            example: 1970-01-01T00:00:00.0Z
-        version:
-          format: int64
-          description: "Internal version of the entity, used for optimistic locking.\
-            \ Required for updates. Generated on server-side, must not be given in\
-            \ creates."
-          type: integer
     EquipmentBookingViewFilter:
       description: Filter for EquipmentBookings
       required:
@@ -58133,109 +56149,6 @@ components:
             \ Required for updates. Generated on server-side, must not be given in\
             \ creates."
           type: integer
-    EquipmentMessageHistory:
-      description: History of messages of an Equipment
-      required:
-      - messageId
-      - openSince
-      - openUser
-      - equipmentId
-      - closedSince
-      - closedUser
-      - confirmToCloseDuration
-      - openToCloseDuration
-      type: object
-      properties:
-        actions:
-          description: Action to be done
-          type: string
-        closedInfo:
-          description: Additional close message
-          type: string
-        closedSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Message close-time
-        closedUser:
-          description: Name of the user that closed the message
-          type: string
-          readOnly: true
-        confirmToCloseDuration:
-          allOf:
-          - $ref: '#/components/schemas/Duration'
-          - description: Duration between confirm and close
-            readOnly: true
-        confirmedInfo:
-          description: Additional confirm message
-          type: string
-        confirmedSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Message confirm-time
-        confirmedUser:
-          description: Name of the user that confirmed the message
-          type: string
-          readOnly: true
-        created:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Date of creation
-            readOnly: true
-            example: 1970-01-01T00:00:00.0Z
-        equipmentId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Equipment
-        lossFactor:
-          format: double
-          description: Lost pieces per hour while the message is not closed
-          type: number
-        messageId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Message
-        openSince:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: "Message open-time. May be set on creation-time of the message,\
-              \ subsequent updates are forbidden!"
-        openToCloseDuration:
-          allOf:
-          - $ref: '#/components/schemas/Duration'
-          - description: Duration between open and close
-            readOnly: true
-        openToConfirmDuration:
-          allOf:
-          - $ref: '#/components/schemas/Duration'
-          - description: Duration between open and confirm
-            readOnly: true
-        openUser:
-          description: Name of the user that opened the message
-          type: string
-          readOnly: true
-        organizationUnitName:
-          description: "Name of the OrganizationUnit, the message was sent for"
-          type: string
-        plantId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the plant
-            readOnly: true
-        responsibleUser:
-          description: Name of the user that is responsible
-          type: string
-        stamp:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Date of last change
-            readOnly: true
-            example: 1970-01-01T00:00:00.0Z
-        version:
-          format: int64
-          description: "Internal version of the entity, used for optimistic locking.\
-            \ Required for updates. Generated on server-side, must not be given in\
-            \ creates."
-          type: integer
     HandlingUnitView:
       description: View of a handlingUnit with it's definition and assigned serialUnits
       type: object
@@ -58307,39 +56220,6 @@ components:
           description: Value of the Measurement
           type: number
       readOnly: true
-    EquipmentMessageAssignment:
-      description: Connect between a Equipment and a Message
-      required:
-      - equipmentId
-      - messageId
-      type: object
-      properties:
-        created:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Date of creation
-            readOnly: true
-            example: 1970-01-01T00:00:00.0Z
-        equipmentId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Equipment
-        messageId:
-          allOf:
-          - $ref: '#/components/schemas/UUID'
-          - description: Id of the Message
-        stamp:
-          allOf:
-          - $ref: '#/components/schemas/OffsetDateTime'
-          - description: Date of last change
-            readOnly: true
-            example: 1970-01-01T00:00:00.0Z
-        version:
-          format: int64
-          description: "Internal version of the entity, used for optimistic locking.\
-            \ Required for updates. Generated on server-side, must not be given in\
-            \ creates."
-          type: integer
     Unit:
       type: object
       properties:
@@ -61048,11 +58928,11 @@ components:
     OrganizationUnitMessage:
       description: Message of an OrganizationUnit
       required:
+      - organizationUnitId
       - messageId
       - openSince
-      - openUser
-      - organizationUnitId
       - itemId
+      - openUser
       type: object
       properties:
         actions:
@@ -61858,11 +59738,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
+        value:
+          type: number
         unit:
           description: Symbol of a unit.
           type: string
-        value:
-          type: number
     ExternalObject:
       description: External Object Identified via ExternalId
       type: object
@@ -62863,12 +60743,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/Scale'
           - default: ABSOLUTE
+        value:
+          type: number
         unit:
           description: "Symbol of a unit for dimension Area, see API /resources/gecunits/dimensions/Area/units\
             \ for valid units."
           type: string
-        value:
-          type: number
   responses:
     ResponseCodeMapping400:
       description: |-

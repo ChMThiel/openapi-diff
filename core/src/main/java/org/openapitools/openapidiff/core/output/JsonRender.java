@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import org.openapitools.openapidiff.core.model.ChangedOpenApi;
 
 public class JsonRender implements Render {
+
   private final ObjectMapper objectMapper;
 
   public JsonRender() {
@@ -19,6 +20,7 @@ public class JsonRender implements Render {
   @Override
   public String render(ChangedOpenApi diff) {
     try {
+      //        return JsonbBuilder.create(new JsonbConfig().withFormatting(true)).toJson(diff);
       return objectMapper.writeValueAsString(diff);
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not serialize diff as JSON", e);
@@ -28,6 +30,9 @@ public class JsonRender implements Render {
   public void renderToFile(ChangedOpenApi diff, String file) {
     try {
       objectMapper.writeValue(Paths.get(file).toFile(), diff);
+      //      JsonbBuilder.create(new JsonbConfig().withFormatting(true))
+      //          .toJson(diff, new FileWriter(file));
+      //            Json.pretty().writeValue(Paths.get(file).toFile(), diff);
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not serialize diff as JSON", e);
     } catch (IOException e) {

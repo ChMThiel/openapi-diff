@@ -14,6 +14,7 @@ import org.openapitools.openapidiff.core.model.ChangedOperation;
 import org.openapitools.openapidiff.core.model.Endpoint;
 import org.openapitools.openapidiff.core.output.HtmlRender;
 import org.openapitools.openapidiff.core.output.JsonRender;
+import org.openapitools.openapidiff.core.output.Markdown2HtmlRender;
 import org.openapitools.openapidiff.core.output.MarkdownRender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,17 +30,24 @@ public class OpenApiDiffTest {
   public void shouldCompareSmom4_1_andRC5() throws IOException {
     ChangedOpenApi changedOpenApi =
         OpenApiCompare.fromLocations("openapi_4_1_org.yaml", "openapi_rc5_org.yaml");
-//        OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
-//    assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
-    String html =
-        new HtmlRender("Changelog", "http://deepoove.com/swagger-diff/stylesheets/demo.css")
-            .render(changedOpenApi);
+    //            OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
+    //    assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
+    String html = new Markdown2HtmlRender().render(changedOpenApi);
     final Path path = Path.of("smom_delta.html");
     try (FileWriter fw = new FileWriter(path.toFile())) {
       log.info("Writing to file " + path);
       fw.write(html);
     }
-    assertThat(path).isNotEmptyFile();
+    String render = new MarkdownRender().render(changedOpenApi);
+    final Path path2 = Path.of("smom_delta.md");
+    try (FileWriter fw = new FileWriter(path2.toFile())) {
+      fw.write(render);
+    }
+    // TODO throw OOM
+    //    new JsonRender().renderToFile(changedOpenApi, "smom_delta.json");
+    // TODO leads to > 10GB files...
+    //    new YamlRender().renderToFile(changedOpenApi, "smom_delta.yaml");
+    //        assertThat(path2).isNotEmptyFile();
   }
 
   @Test

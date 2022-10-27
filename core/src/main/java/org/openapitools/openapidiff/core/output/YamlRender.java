@@ -3,16 +3,19 @@ package org.openapitools.openapidiff.core.output;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 import java.io.IOException;
 import java.nio.file.Paths;
 import org.openapitools.openapidiff.core.model.ChangedOpenApi;
 
-public class JsonRender implements Render {
+public class YamlRender implements Render {
   private final ObjectMapper objectMapper;
 
-  public JsonRender() {
-    objectMapper = new ObjectMapper();
+  public YamlRender() {
+    objectMapper = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER));
     objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
     objectMapper.findAndRegisterModules();
   }
 
