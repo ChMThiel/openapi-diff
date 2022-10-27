@@ -72,11 +72,11 @@ public class SecuritySchemeDiff extends ReferenceDiffCache<SecurityScheme, Chang
       DiffContext context) {
     ChangedSecurityScheme changedSecurityScheme =
         new ChangedSecurityScheme(leftSecurityScheme, rightSecurityScheme);
-
-    openApiDiff
-        .getMetadataDiff()
-        .diff(leftSecurityScheme.getDescription(), rightSecurityScheme.getDescription(), context)
-        .ifPresent(changedSecurityScheme::setDescription);
+//TODO ignore description
+//    openApiDiff
+//        .getMetadataDiff()
+//        .diff(leftSecurityScheme.getDescription(), rightSecurityScheme.getDescription(), context)
+//        .ifPresent(changedSecurityScheme::setDescription);
 
     switch (leftSecurityScheme.getType()) {
       case APIKEY:

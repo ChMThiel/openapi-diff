@@ -63,12 +63,13 @@ public class ParameterDiff extends ReferenceDiffCache<Parameter, ChangedParamete
                 .getSchemaDiff()
                 .diff(left.getSchema(), right.getSchema(), context.copyWithRequired(true)))
         .ifPresent(changedParameter::setSchema);
-    builder
-        .with(
-            openApiDiff
-                .getMetadataDiff()
-                .diff(left.getDescription(), right.getDescription(), context))
-        .ifPresent(changedParameter::setDescription);
+    //TODO ignore description
+//    builder
+//        .with(
+//            openApiDiff
+//                .getMetadataDiff()
+//                .diff(left.getDescription(), right.getDescription(), context))
+//        .ifPresent(changedParameter::setDescription);
     builder
         .with(openApiDiff.getContentDiff().diff(left.getContent(), right.getContent(), context))
         .ifPresent(changedParameter::setContent);

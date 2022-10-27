@@ -144,9 +144,9 @@ public class SchemaDiff {
     if (fromSchema.getUniqueItems() != null) {
       schema.setUniqueItems(fromSchema.getUniqueItems());
     }
-    if (fromSchema.getDescription() != null) {
-      schema.setDescription(fromSchema.getDescription());
-    }
+    //    if (fromSchema.getDescription() != null) {
+    //      schema.setDescription(fromSchema.getDescription());
+    //    }
     if (fromSchema.getFormat() != null) {
       schema.setFormat(fromSchema.getFormat());
     }
@@ -213,9 +213,9 @@ public class SchemaDiff {
       }
       final ExternalDocumentation externalDocs = schema.getExternalDocs();
       final ExternalDocumentation fromExternalDocs = fromSchema.getExternalDocs();
-      if (fromExternalDocs.getDescription() != null) {
-        externalDocs.setDescription(fromExternalDocs.getDescription());
-      }
+      //      if (fromExternalDocs.getDescription() != null) {
+      //        externalDocs.setDescription(fromExternalDocs.getDescription());
+      //      }
       if (fromExternalDocs.getExtensions() != null) {
         if (externalDocs.getExtensions() == null) {
           externalDocs.setExtensions(new LinkedHashMap<>());
