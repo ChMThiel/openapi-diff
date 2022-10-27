@@ -186,8 +186,8 @@ public class ChangedParameter implements ComposedChanged {
         && Objects.equals(newParameter, that.newParameter)
         && Objects.equals(name, that.name)
         && Objects.equals(in, that.in)
-            //TODO ignore description
-//        && Objects.equals(description, that.description)
+        // TODO ignore description
+        //        && Objects.equals(description, that.description)
         && Objects.equals(schema, that.schema)
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);

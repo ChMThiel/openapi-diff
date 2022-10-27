@@ -66,13 +66,13 @@ public class SchemaDiffResult {
                 .getExtensionsDiff()
                 .diff(left.getExtensions(), right.getExtensions(), context))
         .ifPresent(changedSchema::setExtensions);
-    //TODO ignore description
-//    builder
-//        .with(
-//            openApiDiff
-//                .getMetadataDiff()
-//                .diff(left.getDescription(), right.getDescription(), context))
-//        .ifPresent(changedSchema::setDescription);
+    // TODO ignore description
+    //    builder
+    //        .with(
+    //            openApiDiff
+    //                .getMetadataDiff()
+    //                .diff(left.getDescription(), right.getDescription(), context))
+    //        .ifPresent(changedSchema::setDescription);
     Map<String, Schema> leftProperties = left.getProperties();
     Map<String, Schema> rightProperties = right.getProperties();
     MapKeyDiff<String, Schema> propertyDiff = MapKeyDiff.diff(leftProperties, rightProperties);
