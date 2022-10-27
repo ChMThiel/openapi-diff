@@ -161,7 +161,8 @@ public class ChangedSecurityScheme implements ComposedChanged {
         && Objects.equals(oldSecurityScheme, that.oldSecurityScheme)
         && Objects.equals(newSecurityScheme, that.newSecurityScheme)
         && Objects.equals(changedScopes, that.changedScopes)
-        && Objects.equals(description, that.description)
+            //TODO ignore description
+//        && Objects.equals(description, that.description)
         && Objects.equals(oAuthFlows, that.oAuthFlows)
         && Objects.equals(extensions, that.extensions);
   }

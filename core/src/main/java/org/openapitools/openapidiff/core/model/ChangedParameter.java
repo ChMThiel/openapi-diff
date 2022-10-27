@@ -206,7 +206,7 @@ public class ChangedParameter implements ComposedChanged {
         changeStyle,
         changeExplode,
         changeAllowEmptyValue,
-        description,
+//        description,
         schema,
         content,
         extensions);

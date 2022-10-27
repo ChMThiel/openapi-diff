@@ -193,7 +193,8 @@ public class ChangedOperation implements ComposedChanged {
         && Objects.equals(pathUrl, that.pathUrl)
         && httpMethod == that.httpMethod
         && Objects.equals(summary, that.summary)
-        && Objects.equals(description, that.description)
+            //TODO ignore description
+//        && Objects.equals(description, that.description)
         && Objects.equals(operationId, that.operationId)
         && Objects.equals(parameters, that.parameters)
         && Objects.equals(requestBody, that.requestBody)
@@ -210,7 +211,7 @@ public class ChangedOperation implements ComposedChanged {
         pathUrl,
         httpMethod,
         summary,
-        description,
+//        description,
         operationId,
         deprecated,
         parameters,

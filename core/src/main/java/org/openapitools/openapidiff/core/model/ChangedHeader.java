@@ -136,7 +136,8 @@ public class ChangedHeader implements ComposedChanged {
         && Objects.equals(oldHeader, that.oldHeader)
         && Objects.equals(newHeader, that.newHeader)
         && Objects.equals(context, that.context)
-        && Objects.equals(description, that.description)
+            //TODO ignore description
+//        && Objects.equals(description, that.description)
         && Objects.equals(schema, that.schema)
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);
@@ -152,7 +153,7 @@ public class ChangedHeader implements ComposedChanged {
         deprecated,
         style,
         explode,
-        description,
+//        description,
         schema,
         content,
         extensions);
