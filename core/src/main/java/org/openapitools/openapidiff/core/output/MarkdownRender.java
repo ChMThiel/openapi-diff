@@ -466,21 +466,23 @@ public class MarkdownRender implements Render {
     if (schema.isChangedType()) {
       type = type(schema.getOldSchema()) + " -> " + type(schema.getNewSchema());
     }
-      StringJoiner details = new StringJoiner(", ", ", *", "*").setEmptyValue("");
-      if(schema.isIncompatible()) {
-          details.add("incompatible");
+    StringJoiner details = new StringJoiner(", ", ", *", "*").setEmptyValue("");
+    if (schema.isIncompatible()) {
+      details.add("incompatible");
+    }
+    if (!Objects.equals(schema.getOldSchema().getNullable(), schema.getNewSchema().getNullable())) {
+      if (Boolean.TRUE.equals(schema.getNewSchema().getNullable())) {
+        details.add("change to nullable");
+      } else {
+        details.add("change to not nullable");
       }
-      if (!Objects.equals(schema.getOldSchema().getNullable(), schema.getNewSchema().getNullable())) {
-          if(Boolean.TRUE.equals(schema.getNewSchema().getNullable())) {
-                 details.add("change to nullable");
-          }else {
-                 details.add("change to not nullable");
-          }
-      }
-    sb.append(property(deepness,
+    }
+    sb.append(
+        property(
+            deepness,
             "Changed property",
             name,
-            type+details.toString(),
+            type + details.toString(),
             schema.getNewSchema().getDescription()));
     sb.append(schema(++deepness, schema));
     return sb.toString();
