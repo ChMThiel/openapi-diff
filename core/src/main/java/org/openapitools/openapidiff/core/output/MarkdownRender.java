@@ -351,7 +351,7 @@ public class MarkdownRender implements Render {
     }
     if (schema.getRequired() != null) {
       sb.append(required(deepness, "New required properties", schema.getRequired().getIncreased()));
-      sb.append(required(deepness, "New optional properties", schema.getRequired().getMissing()));
+//      sb.append(required(deepness, "New optional properties", schema.getRequired().getMissing()));
     }
     if (schema.getItems() != null) {
       sb.append(items(deepness, schema.getItems()));
