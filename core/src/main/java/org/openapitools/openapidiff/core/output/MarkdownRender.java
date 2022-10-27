@@ -62,35 +62,38 @@ public class MarkdownRender implements Render {
                   return true;
                 })
             .toList();
-    String result = "## Changes in "
-        + diff.getOldSpecOpenApi().getInfo().getTitle()
-        + " "
-        + "from "
-        + diff.getOldSpecOpenApi().getInfo().getVersion()
-        + " "
-        + "to "
-        + diff.getNewSpecOpenApi().getInfo().getVersion()
-        + "\n"
-        + H3
-        + "Table of contents\n"
-        + "1. [What's New](#new)\n"
-        + "2. [What's Deleted](#deleted)\n"
-        + "3. [What's Deprecated](#deprecated)\n"
-        + "4. [What's Changed Incompatible](#changedIncompatible)\n"
-        + "5. [What's Changed compatible](#changed)\n"
-        + listEndpoints(
-            "What's New (" + diff.getNewEndpoints().size() + ") <a name=\"new\"></a>",
-            diff.getNewEndpoints())
-        + listEndpoints(
-            "What's Deleted (" + diff.getMissingEndpoints().size() + ") <a name=\"deleted\"></a>",
-            diff.getMissingEndpoints())
-        + listEndpoints(
-            "What's Deprecated ("
-                + diff.getDeprecatedEndpoints().size()
-                + ") <a name=\"deprecated\"></a>",
-            diff.getDeprecatedEndpoints())
-        + listEndpoints(changedOperations);
-    return result.replaceAll("(?m)^[ \t]*\r?\n", ""); //remove empty lines
+    String result =
+        "## Changes in "
+            + diff.getOldSpecOpenApi().getInfo().getTitle()
+            + " "
+            + "from "
+            + diff.getOldSpecOpenApi().getInfo().getVersion()
+            + " "
+            + "to "
+            + diff.getNewSpecOpenApi().getInfo().getVersion()
+            + "\n"
+            + H3
+            + "Table of contents\n"
+            + "1. [What's New](#new)\n"
+            + "2. [What's Deleted](#deleted)\n"
+            + "3. [What's Deprecated](#deprecated)\n"
+            + "4. [What's Changed Incompatible](#changedIncompatible)\n"
+            + "5. [What's Changed compatible](#changed)\n"
+            + listEndpoints(
+                "What's New (" + diff.getNewEndpoints().size() + ") <a name=\"new\"></a>",
+                diff.getNewEndpoints())
+            + listEndpoints(
+                "What's Deleted ("
+                    + diff.getMissingEndpoints().size()
+                    + ") <a name=\"deleted\"></a>",
+                diff.getMissingEndpoints())
+            + listEndpoints(
+                "What's Deprecated ("
+                    + diff.getDeprecatedEndpoints().size()
+                    + ") <a name=\"deprecated\"></a>",
+                diff.getDeprecatedEndpoints())
+            + listEndpoints(changedOperations);
+    return result.replaceAll("(?m)^[ \t]*\r?\n", ""); // remove empty lines
   }
 
   protected String sectionTitle(String title) {
@@ -140,18 +143,20 @@ public class MarkdownRender implements Render {
       details.append(titleH5("Parameters:")).append(parameters(aChangedOperation.getParameters()));
     }
     String requiredChange = "";
-    if(aChangedOperation.getRequestBody() != null && aChangedOperation.getRequestBody().isChangeRequired()) {
-        if(Boolean.TRUE.equals(aChangedOperation.getRequestBody().getNewRequestBody().getRequired())) {
-            requiredChange = "*change to body required*\n";
-        } else {
-            requiredChange = "*change to body not required*\n";
-        }
+    if (aChangedOperation.getRequestBody() != null
+        && aChangedOperation.getRequestBody().isChangeRequired()) {
+      if (Boolean.TRUE.equals(
+          aChangedOperation.getRequestBody().getNewRequestBody().getRequired())) {
+        requiredChange = "*change to body required*\n";
+      } else {
+        requiredChange = "*change to body not required*\n";
+      }
     }
     if (aChangedOperation.resultRequestBody().isDifferent()) {
       details
           .append(titleH5("Request:"))
           .append(metadata("Description", aChangedOperation.getRequestBody().getDescription()))
-              .append(requiredChange)
+          .append(requiredChange)
           .append(bodyContent(aChangedOperation.getRequestBody().getContent()));
     }
     if (aChangedOperation.resultApiResponses().isDifferent()) {

@@ -32,10 +32,10 @@ public class OpenApiDiffTest {
         OpenApiCompare.fromLocations("openapi_4_1_org.yaml", "openapi_rc5_org.yaml");
     //            OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
     //    assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
-        String html = new Markdown2HtmlRender().render(changedOpenApi);
-//    String html =
-//        new HtmlRender("Changelog", "http://deepoove.com/swagger-diff/stylesheets/demo.css")
-//            .render(changedOpenApi);
+    String html = new Markdown2HtmlRender().render(changedOpenApi);
+    //    String html =
+    //        new HtmlRender("Changelog", "http://deepoove.com/swagger-diff/stylesheets/demo.css")
+    //            .render(changedOpenApi);
     final Path path = Path.of("smom_delta.html");
     try (FileWriter fw = new FileWriter(path.toFile())) {
       log.info("Writing to file " + path);
