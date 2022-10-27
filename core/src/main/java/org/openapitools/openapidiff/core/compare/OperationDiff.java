@@ -111,15 +111,15 @@ public class OperationDiff {
               });
     }
 
-    //TODO make config
-//    if (oldOperation.getSecurity() != null || newOperation.getSecurity() != null) {
-//      builder
-//          .with(
-//              openApiDiff
-//                  .getSecurityRequirementsDiff()
-//                  .diff(oldOperation.getSecurity(), newOperation.getSecurity(), context))
-//          .ifPresent(changedOperation::setSecurityRequirements);
-//    }
+    // TODO make config
+    //    if (oldOperation.getSecurity() != null || newOperation.getSecurity() != null) {
+    //      builder
+    //          .with(
+    //              openApiDiff
+    //                  .getSecurityRequirementsDiff()
+    //                  .diff(oldOperation.getSecurity(), newOperation.getSecurity(), context))
+    //          .ifPresent(changedOperation::setSecurityRequirements);
+    //    }
 
     builder
         .with(
