@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.ComposedSchema;
+import io.swagger.v3.oas.models.media.DateTimeSchema;
 import io.swagger.v3.oas.models.media.Discriminator;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.XML;
@@ -143,9 +144,9 @@ public class SchemaDiff {
     if (fromSchema.getUniqueItems() != null) {
       schema.setUniqueItems(fromSchema.getUniqueItems());
     }
-    //    if (fromSchema.getDescription() != null) {
-    //      schema.setDescription(fromSchema.getDescription());
-    //    }
+    if (fromSchema.getDescription() != null) {
+      schema.setDescription(fromSchema.getDescription());
+    }
     if (fromSchema.getFormat() != null) {
       schema.setFormat(fromSchema.getFormat());
     }
@@ -311,12 +312,22 @@ public class SchemaDiff {
 
   public DeferredChanged<ChangedSchema> getTypeChangedSchema(
       Schema left, Schema right, DiffContext context) {
+    boolean changedType = true;
+    if (left instanceof DateTimeSchema && "date-time".equals(right.getFormat())) {
+      changedType = false;
+    }
+    if (right instanceof DateTimeSchema && "date-time".equals(left.getFormat())) {
+      changedType = false;
+    }
+    if (!changedType) {
+      return new RealizedChanged<>(Optional.empty());
+    }
     return new RealizedChanged(
         SchemaDiff.getSchemaDiffResult(openApiDiff)
             .getChangedSchema()
             .setOldSchema(left)
             .setNewSchema(right)
-            .setChangedType(true)
+            .setChangedType(changedType)
             .setContext(context));
   }
 
