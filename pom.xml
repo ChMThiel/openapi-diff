@@ -71,8 +71,8 @@
     </distributionManagement>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.outputTimestamp>2022-10-24T20:29:12Z</project.build.outputTimestamp>
@@ -301,16 +301,16 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.22.2</version>
                 </plugin>
-                <plugin>
-                    <groupId>com.coveo</groupId>
+<!--                <plugin>
+                    <groupId>com.spotify.fmt</groupId>
                     <artifactId>fmt-maven-plugin</artifactId>
-                    <version>2.9.1</version>
-                </plugin>
-                <plugin>
+                    <version>2.19</version>
+                </plugin>-->
+<!--                <plugin>
                     <groupId>io.github.phillipuniverse</groupId>
                     <artifactId>githook-maven-plugin</artifactId>
                     <version>1.0.5</version>
-                </plugin>
+                </plugin>-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
@@ -359,8 +359,8 @@
                     <releaseProfiles>release</releaseProfiles>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.coveo</groupId>
+<!--            <plugin>
+                <groupId>com.spotify.fmt</groupId>
                 <artifactId>fmt-maven-plugin</artifactId>
                 <executions>
                     <execution>
@@ -369,8 +369,8 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
+            </plugin>-->
+<!--            <plugin>
                 <groupId>io.github.phillipuniverse</groupId>
                 <artifactId>githook-maven-plugin</artifactId>
                 <executions>
@@ -388,7 +388,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

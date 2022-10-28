@@ -32,21 +32,26 @@ public class OpenApiDiffTest {
         OpenApiCompare.fromLocations("openapi_4_1_org.yaml", "openapi_rc5_org.yaml");
     //            OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
     //    assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
-    String html = new Markdown2HtmlRender().render(changedOpenApi);
-    //    String html =
-    //        new HtmlRender("Changelog", "http://deepoove.com/swagger-diff/stylesheets/demo.css")
-    //            .render(changedOpenApi);
-    final Path path = Path.of("smom_delta.html");
-    try (FileWriter fw = new FileWriter(path.toFile())) {
-      log.info("Writing to file " + path);
+    String md2Html = new Markdown2HtmlRender().render(changedOpenApi);
+    final Path pathMd2Html = Path.of("smom_md_delta.html");
+    try (FileWriter fw = new FileWriter(pathMd2Html.toFile())) {
+      log.info("Writing to file " + pathMd2Html);
+      fw.write(md2Html);
+    }
+    String html =
+        new HtmlRender("Changelog", "http://deepoove.com/swagger-diff/stylesheets/demo.css")
+            .render(changedOpenApi);
+    final Path pathHtml = Path.of("smom_delta.html");
+    try (FileWriter fw = new FileWriter(pathHtml.toFile())) {
+      log.info("Writing to file " + pathHtml);
       fw.write(html);
     }
     String render =
         new MarkdownRender()
             //            .setShowChangedMetadata(true)
             .render(changedOpenApi);
-    final Path path2 = Path.of("smom_delta.md");
-    try (FileWriter fw = new FileWriter(path2.toFile())) {
+    final Path pathMd = Path.of("smom_delta.md");
+    try (FileWriter fw = new FileWriter(pathMd.toFile())) {
       fw.write(render);
     }
     // TODO throw OOM

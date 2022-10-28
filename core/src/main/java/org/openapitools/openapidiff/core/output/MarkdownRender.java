@@ -65,15 +65,14 @@ public class MarkdownRender implements Render {
     String result =
         "## Changes in "
             + diff.getOldSpecOpenApi().getInfo().getTitle()
-            + " "
-            + "from "
+            + " from "
             + diff.getOldSpecOpenApi().getInfo().getVersion()
-            + " "
-            + "to "
+            + " to "
             + diff.getNewSpecOpenApi().getInfo().getVersion()
             + "\n"
             + H3
             + "Table of contents\n"
+            // TODO add only non-empty to TOC
             + "1. [What's New](#new)\n"
             + "2. [What's Deleted](#deleted)\n"
             + "3. [What's Deprecated](#deprecated)\n"
