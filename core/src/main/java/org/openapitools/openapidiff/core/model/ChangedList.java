@@ -1,13 +1,17 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public abstract class ChangedList<T> implements Changed {
+    @JsonIgnore
   protected DiffContext context;
+    @JsonIgnore
   protected List<T> oldValue;
+    @JsonIgnore
   protected List<T> newValue;
   private List<T> increased;
   private List<T> missing;

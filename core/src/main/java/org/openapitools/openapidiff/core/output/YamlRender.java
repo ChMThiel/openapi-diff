@@ -3,6 +3,7 @@ package org.openapitools.openapidiff.core.output;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 import java.io.IOException;
@@ -13,10 +14,13 @@ public class YamlRender implements Render {
   private final ObjectMapper objectMapper;
 
   public YamlRender() {
-    objectMapper = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER));
-    objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-    objectMapper.findAndRegisterModules();
+      objectMapper = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER));
+      objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+      objectMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+      objectMapper.setSerializationInclusion(JsonInclude.Include.NON_ABSENT);
+      objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+      objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+      objectMapper.findAndRegisterModules();
   }
 
   @Override

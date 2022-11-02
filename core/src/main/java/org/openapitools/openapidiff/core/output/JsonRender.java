@@ -30,9 +30,6 @@ public class JsonRender implements Render {
   public void renderToFile(ChangedOpenApi diff, String file) {
     try {
       objectMapper.writeValue(Paths.get(file).toFile(), diff);
-      //      JsonbBuilder.create(new JsonbConfig().withFormatting(true))
-      //          .toJson(diff, new FileWriter(file));
-      //            Json.pretty().writeValue(Paths.get(file).toFile(), diff);
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not serialize diff as JSON", e);
     } catch (IOException e) {

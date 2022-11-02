@@ -1,13 +1,17 @@
 package org.openapitools.openapidiff.core.model.schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 import org.openapitools.openapidiff.core.model.Changed;
 import org.openapitools.openapidiff.core.model.DiffContext;
 import org.openapitools.openapidiff.core.model.DiffResult;
 
 public final class ChangedMaxLength implements Changed {
+    @JsonIgnore
   private final Integer oldValue;
+    @JsonIgnore
   private final Integer newValue;
+    @JsonIgnore
   private final DiffContext context;
 
   @Override

@@ -1,12 +1,16 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import java.util.*;
 
 public class ChangedContent implements ComposedChanged {
-  private final Content oldContent;
+@JsonIgnore
+    private final Content oldContent;
+@JsonIgnore
   private final Content newContent;
+@JsonIgnore
   private final DiffContext context;
   private Map<String, MediaType> increased;
   private Map<String, MediaType> missing;

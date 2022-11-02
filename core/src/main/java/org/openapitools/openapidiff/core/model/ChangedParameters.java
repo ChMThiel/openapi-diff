@@ -1,13 +1,17 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class ChangedParameters implements ComposedChanged {
+    @JsonIgnore
   private final List<Parameter> oldParameterList;
+    @JsonIgnore
   private final List<Parameter> newParameterList;
+    @JsonIgnore
   private final DiffContext context;
   private List<Parameter> increased;
   private List<Parameter> missing;

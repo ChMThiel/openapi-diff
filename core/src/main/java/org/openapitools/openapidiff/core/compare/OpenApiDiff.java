@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.compare;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import static org.openapitools.openapidiff.core.compare.PathsDiff.valOrEmpty;
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.openapitools.openapidiff.core.OpenApiCompare.Configuration;
 import org.openapitools.openapidiff.core.model.ChangedExtensions;
 import org.openapitools.openapidiff.core.model.ChangedOpenApi;
 import org.openapitools.openapidiff.core.model.ChangedOperation;
@@ -20,48 +22,73 @@ import org.openapitools.openapidiff.core.model.deferred.DeferredSchemaCache;
 import org.openapitools.openapidiff.core.utils.EndpointUtils;
 
 public class OpenApiDiff {
+    @JsonIgnore
   private PathsDiff pathsDiff;
+    @JsonIgnore
   private PathDiff pathDiff;
+    @JsonIgnore
   private SchemaDiff schemaDiff;
+    @JsonIgnore
   private ContentDiff contentDiff;
+    @JsonIgnore
   private ParametersDiff parametersDiff;
+    @JsonIgnore
   private ParameterDiff parameterDiff;
+    @JsonIgnore
   private RequestBodyDiff requestBodyDiff;
+    @JsonIgnore
   private ResponseDiff responseDiff;
+    @JsonIgnore
   private HeadersDiff headersDiff;
+    @JsonIgnore
   private HeaderDiff headerDiff;
+    @JsonIgnore
   private ApiResponseDiff apiResponseDiff;
+    @JsonIgnore
   private OperationDiff operationDiff;
+    @JsonIgnore
   private SecurityRequirementsDiff securityRequirementsDiff;
+    @JsonIgnore
   private SecurityRequirementDiff securityRequirementDiff;
+    @JsonIgnore
   private SecuritySchemeDiff securitySchemeDiff;
+    @JsonIgnore
   private OAuthFlowsDiff oAuthFlowsDiff;
+    @JsonIgnore
   private OAuthFlowDiff oAuthFlowDiff;
+    @JsonIgnore
   private ExtensionsDiff extensionsDiff;
+    @JsonIgnore
   private MetadataDiff metadataDiff;
+    @JsonIgnore
   private final OpenAPI oldSpecOpenApi;
+    @JsonIgnore
   private final OpenAPI newSpecOpenApi;
   private List<Endpoint> newEndpoints;
   private List<Endpoint> missingEndpoints;
   private List<ChangedOperation> changedOperations;
   private ChangedExtensions changedExtensions;
+    @JsonIgnore
   private DeferredSchemaCache deferredSchemaCache;
+    @JsonIgnore
+  private final Configuration configuration;
 
   /*
    * @param oldSpecOpenApi
    * @param newSpecOpenApi
    */
-  private OpenApiDiff(OpenAPI oldSpecOpenApi, OpenAPI newSpecOpenApi) {
+  private OpenApiDiff(OpenAPI oldSpecOpenApi, OpenAPI newSpecOpenApi, Configuration aConfiguration) {
     this.oldSpecOpenApi = oldSpecOpenApi;
     this.newSpecOpenApi = newSpecOpenApi;
     if (null == oldSpecOpenApi || null == newSpecOpenApi) {
       throw new RuntimeException("one of the old or new object is null");
     }
     initializeFields();
+    configuration = aConfiguration;
   }
 
-  public static ChangedOpenApi compare(OpenAPI oldSpec, OpenAPI newSpec) {
-    return new OpenApiDiff(oldSpec, newSpec).compare();
+  public static ChangedOpenApi compare(OpenAPI oldSpec, OpenAPI newSpec, Configuration aConfiguration) {
+    return new OpenApiDiff(oldSpec, newSpec, aConfiguration).compare();
   }
 
   private void initializeFields() {
@@ -276,4 +303,9 @@ public class OpenApiDiff {
   public ChangedExtensions getChangedExtensions() {
     return this.changedExtensions;
   }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+  
 }

@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.headers.Header;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +8,11 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ChangedHeaders implements ComposedChanged {
+    @JsonIgnore
   private final Map<String, Header> oldHeaders;
+    @JsonIgnore
   private final Map<String, Header> newHeaders;
+    @JsonIgnore
   private final DiffContext context;
   private Map<String, Header> increased;
   private Map<String, Header> missing;

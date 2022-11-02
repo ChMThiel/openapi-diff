@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import java.util.LinkedHashMap;
@@ -10,8 +11,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ChangedApiResponse implements ComposedChanged {
+    @JsonIgnore
   private final ApiResponses oldApiResponses;
+    @JsonIgnore
   private final ApiResponses newApiResponses;
+    @JsonIgnore
   private final DiffContext context;
   private Map<String, ApiResponse> increased;
   private Map<String, ApiResponse> missing;

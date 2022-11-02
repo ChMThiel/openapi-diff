@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotNull;
 public interface ComposedChanged extends Changed {
 
   @NotNull
+          @JsonIgnore
   List<Changed> getChangedElements();
 
   @NotNull

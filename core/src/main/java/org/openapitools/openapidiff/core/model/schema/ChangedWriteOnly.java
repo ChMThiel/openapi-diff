@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model.schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 import java.util.Optional;
 import org.openapitools.openapidiff.core.model.Changed;
@@ -7,9 +8,12 @@ import org.openapitools.openapidiff.core.model.DiffContext;
 import org.openapitools.openapidiff.core.model.DiffResult;
 
 public class ChangedWriteOnly implements Changed {
+    @JsonIgnore
   private final DiffContext context;
+    @JsonIgnore
   private final boolean oldValue;
-  private final boolean newValue;
+    @JsonIgnore
+    private final boolean newValue;
   //    private final boolean required;
 
   public ChangedWriteOnly(Boolean oldValue, Boolean newValue, DiffContext context) {

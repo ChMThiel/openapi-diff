@@ -1,13 +1,17 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.media.Schema;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class ChangedMediaType implements ComposedChanged {
+    @JsonIgnore
   private final Schema oldSchema;
+    @JsonIgnore
   private final Schema newSchema;
+    @JsonIgnore
   private final DiffContext context;
   private ChangedSchema schema;
 

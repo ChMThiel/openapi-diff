@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,9 @@ import java.util.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 
 public class ChangedSecurityRequirements implements ComposedChanged {
+    @JsonIgnore
   private List<SecurityRequirement> oldSecurityRequirements;
+    @JsonIgnore
   private List<SecurityRequirement> newSecurityRequirements;
   private List<SecurityRequirement> missing;
   private List<SecurityRequirement> increased;

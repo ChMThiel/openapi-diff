@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import java.util.*;
@@ -8,8 +9,11 @@ import java.util.stream.Stream;
 
 public class ChangedPath implements ComposedChanged {
   private final String pathUrl;
+  @JsonIgnore
   private final PathItem oldPath;
+  @JsonIgnore
   private final PathItem newPath;
+  @JsonIgnore
   private final DiffContext context;
   Map<PathItem.HttpMethod, Operation> increased;
   Map<PathItem.HttpMethod, Operation> missing;

@@ -1,14 +1,19 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import java.util.Objects;
 
 public class Endpoint {
   private String pathUrl;
+  @JsonIgnore
   private PathItem.HttpMethod method;
+  @JsonIgnore
   private String summary;
+  @JsonIgnore
   private PathItem path;
+  @JsonIgnore
   private Operation operation;
 
   @Override

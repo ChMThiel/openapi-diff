@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +8,11 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ChangedOneOfSchema implements ComposedChanged {
+    @JsonIgnore
   private final Map<String, String> oldMapping;
+    @JsonIgnore
   private final Map<String, String> newMapping;
+    @JsonIgnore
   private final DiffContext context;
   private Map<String, Schema> increased;
   private Map<String, Schema> missing;

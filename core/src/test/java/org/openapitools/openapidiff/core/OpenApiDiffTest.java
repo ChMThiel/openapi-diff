@@ -16,6 +16,7 @@ import org.openapitools.openapidiff.core.output.HtmlRender;
 import org.openapitools.openapidiff.core.output.JsonRender;
 import org.openapitools.openapidiff.core.output.Markdown2HtmlRender;
 import org.openapitools.openapidiff.core.output.MarkdownRender;
+import org.openapitools.openapidiff.core.output.YamlRender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +29,9 @@ public class OpenApiDiffTest {
 
   @Test
   public void shouldCompareSmom4_1_andRC5() throws IOException {
+      OpenApiCompare.Configuration configuration = new OpenApiCompare.Configuration(true, true, true, ".*/q/.*");
     ChangedOpenApi changedOpenApi =
-        OpenApiCompare.fromLocations("openapi_4_1_org.yaml", "openapi_rc5_org.yaml");
+        OpenApiCompare.fromLocations("openapi_4_1_org.yaml", "openapi_rc5_org.yaml", configuration);
     //            OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
     //    assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
     String md2Html = new Markdown2HtmlRender().render(changedOpenApi);
@@ -57,8 +59,7 @@ public class OpenApiDiffTest {
     // TODO throw OOM
     //    new JsonRender().renderToFile(changedOpenApi, "smom_delta.json");
     // TODO leads to > 10GB files...
-    //    new YamlRender().renderToFile(changedOpenApi, "smom_delta.yaml");
-    //        assertThat(path2).isNotEmptyFile();
+        new YamlRender().renderToFile(changedOpenApi, "smom_delta.yaml");
   }
 
   @Test

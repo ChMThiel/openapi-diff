@@ -1,12 +1,15 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.security.OAuthFlows;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ChangedOAuthFlows implements ComposedChanged {
+    @JsonIgnore
   private final OAuthFlows oldOAuthFlows;
+    @JsonIgnore
   private final OAuthFlows newOAuthFlows;
   private ChangedOAuthFlow implicitOAuthFlow;
   private ChangedOAuthFlow passwordOAuthFlow;
