@@ -16,11 +16,10 @@ public class DiffContext {
   private boolean response;
   private boolean request;
   private Boolean required;
-  @JsonIgnore
-  private final OpenApiDiff openApiDiff;
+  @JsonIgnore private final OpenApiDiff openApiDiff;
 
   public DiffContext(OpenApiDiff aOpenApiDiff) {
-      openApiDiff = aOpenApiDiff;
+    openApiDiff = aOpenApiDiff;
     parameters = new HashMap<>();
     response = false;
     request = true;
@@ -139,8 +138,7 @@ public class DiffContext {
         .toHashCode();
   }
 
-    public OpenApiDiff getOpenApiDiff() {
-        return openApiDiff;
-    }
-  
+  public OpenApiDiff getOpenApiDiff() {
+    return openApiDiff;
+  }
 }

@@ -7,14 +7,10 @@ import java.util.Objects;
 
 public class Endpoint {
   private String pathUrl;
-  @JsonIgnore
-  private PathItem.HttpMethod method;
-  @JsonIgnore
-  private String summary;
-  @JsonIgnore
-  private PathItem path;
-  @JsonIgnore
-  private Operation operation;
+  @JsonIgnore private PathItem.HttpMethod method;
+  @JsonIgnore private String summary;
+  @JsonIgnore private PathItem path;
+  @JsonIgnore private Operation operation;
 
   @Override
   public String toString() {

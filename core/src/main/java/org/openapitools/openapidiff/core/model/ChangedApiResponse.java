@@ -11,12 +11,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ChangedApiResponse implements ComposedChanged {
-    @JsonIgnore
-  private final ApiResponses oldApiResponses;
-    @JsonIgnore
-  private final ApiResponses newApiResponses;
-    @JsonIgnore
-  private final DiffContext context;
+  @JsonIgnore private final ApiResponses oldApiResponses;
+  @JsonIgnore private final ApiResponses newApiResponses;
+  @JsonIgnore private final DiffContext context;
   private Map<String, ApiResponse> increased;
   private Map<String, ApiResponse> missing;
   private Map<String, ChangedResponse> changed;

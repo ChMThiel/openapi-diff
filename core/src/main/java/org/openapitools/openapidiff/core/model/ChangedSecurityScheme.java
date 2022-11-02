@@ -153,11 +153,15 @@ public class ChangedSecurityScheme implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedSecurityScheme that = (ChangedSecurityScheme) o;
-     boolean descEquals;
-    if(!that.getChangedScopes().getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
-        descEquals = Objects.equals(description, that.description);
+    boolean descEquals;
+    if (!that.getChangedScopes()
+        .getContext()
+        .getOpenApiDiff()
+        .getConfiguration()
+        .ignoreDescription()) {
+      descEquals = Objects.equals(description, that.description);
     } else {
-        descEquals = true;
+      descEquals = true;
     }
     return changedType == that.changedType
         && changedIn == that.changedIn
@@ -167,7 +171,7 @@ public class ChangedSecurityScheme implements ComposedChanged {
         && Objects.equals(oldSecurityScheme, that.oldSecurityScheme)
         && Objects.equals(newSecurityScheme, that.newSecurityScheme)
         && Objects.equals(changedScopes, that.changedScopes)
-            && descEquals
+        && descEquals
         && Objects.equals(oAuthFlows, that.oAuthFlows)
         && Objects.equals(extensions, that.extensions);
   }
@@ -183,7 +187,9 @@ public class ChangedSecurityScheme implements ComposedChanged {
         changedBearerFormat,
         changedOpenIdConnectUrl,
         changedScopes,
-                getChangedScopes().getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
+        getChangedScopes().getContext().getOpenApiDiff().getConfiguration().ignoreDescription()
+            ? null
+            : description,
         oAuthFlows,
         extensions);
   }

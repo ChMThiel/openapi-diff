@@ -7,12 +7,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 public abstract class ChangedList<T> implements Changed {
-    @JsonIgnore
-  protected DiffContext context;
-    @JsonIgnore
-  protected List<T> oldValue;
-    @JsonIgnore
-  protected List<T> newValue;
+  @JsonIgnore protected DiffContext context;
+  @JsonIgnore protected List<T> oldValue;
+  @JsonIgnore protected List<T> newValue;
   private List<T> increased;
   private List<T> missing;
   private List<T> shared;

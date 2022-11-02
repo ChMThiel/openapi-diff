@@ -8,10 +8,8 @@ import java.util.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 
 public class ChangedSecurityRequirements implements ComposedChanged {
-    @JsonIgnore
-  private List<SecurityRequirement> oldSecurityRequirements;
-    @JsonIgnore
-  private List<SecurityRequirement> newSecurityRequirements;
+  @JsonIgnore private List<SecurityRequirement> oldSecurityRequirements;
+  @JsonIgnore private List<SecurityRequirement> newSecurityRequirements;
   private List<SecurityRequirement> missing;
   private List<SecurityRequirement> increased;
   private List<ChangedSecurityRequirement> changed;

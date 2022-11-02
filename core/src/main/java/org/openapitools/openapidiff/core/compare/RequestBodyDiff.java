@@ -1,8 +1,8 @@
 package org.openapitools.openapidiff.core.compare;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import static java.util.Optional.ofNullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import java.util.HashSet;
@@ -18,8 +18,7 @@ import org.openapitools.openapidiff.core.utils.RefType;
 public class RequestBodyDiff extends ReferenceDiffCache<RequestBody, ChangedRequestBody> {
   private static final RefPointer<RequestBody> refPointer =
       new RefPointer<>(RefType.REQUEST_BODIES);
-  @JsonIgnore
-  private final OpenApiDiff openApiDiff;
+  @JsonIgnore private final OpenApiDiff openApiDiff;
 
   public RequestBodyDiff(OpenApiDiff openApiDiff) {
     this.openApiDiff = openApiDiff;
@@ -69,16 +68,16 @@ public class RequestBodyDiff extends ReferenceDiffCache<RequestBody, ChangedRequ
     ChangedRequestBody changedRequestBody =
         new ChangedRequestBody(oldRequestBody, newRequestBody, context)
             .setChangeRequired(leftRequired != rightRequired);
-    if(!openApiDiff.getConfiguration().ignoreDescription()) {
-        builder
-            .with(
-                openApiDiff
-                    .getMetadataDiff()
-                    .diff(
-                        oldRequestBody != null ? oldRequestBody.getDescription() : null,
-                        newRequestBody != null ? newRequestBody.getDescription() : null,
-                        context))
-            .ifPresent(changedRequestBody::setDescription);
+    if (!openApiDiff.getConfiguration().ignoreDescription()) {
+      builder
+          .with(
+              openApiDiff
+                  .getMetadataDiff()
+                  .diff(
+                      oldRequestBody != null ? oldRequestBody.getDescription() : null,
+                      newRequestBody != null ? newRequestBody.getDescription() : null,
+                      context))
+          .ifPresent(changedRequestBody::setDescription);
     }
     builder
         .with(openApiDiff.getContentDiff().diff(oldRequestContent, newRequestContent, context))

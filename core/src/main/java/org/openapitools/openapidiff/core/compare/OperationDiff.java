@@ -1,8 +1,8 @@
 package org.openapitools.openapidiff.core.compare;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import static org.openapitools.openapidiff.core.utils.ChangedUtils.isChanged;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import java.util.List;
@@ -22,8 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class OperationDiff {
   private static final Logger log = LoggerFactory.getLogger(OperationDiff.class);
-@JsonIgnore
-  private final OpenApiDiff openApiDiff;
+  @JsonIgnore private final OpenApiDiff openApiDiff;
 
   public OperationDiff(OpenApiDiff openApiDiff) {
     this.openApiDiff = openApiDiff;
@@ -39,19 +38,19 @@ public class OperationDiff {
     log.debug(
         "Diff operation {} {}", changedOperation.getPathUrl(), changedOperation.getHttpMethod());
 
-    if(!openApiDiff.getConfiguration().ignoreDescription()) {
-        builder 
-            .with(
-                openApiDiff
-                    .getMetadataDiff()
-                    .diff(oldOperation.getSummary(), newOperation.getSummary(), context))
-            .ifPresent(changedOperation::setSummary);
-        builder
-            .with(
-                openApiDiff
-                    .getMetadataDiff()
-                    .diff(oldOperation.getDescription(), newOperation.getDescription(), context))
-            .ifPresent(changedOperation::setDescription);
+    if (!openApiDiff.getConfiguration().ignoreDescription()) {
+      builder
+          .with(
+              openApiDiff
+                  .getMetadataDiff()
+                  .diff(oldOperation.getSummary(), newOperation.getSummary(), context))
+          .ifPresent(changedOperation::setSummary);
+      builder
+          .with(
+              openApiDiff
+                  .getMetadataDiff()
+                  .diff(oldOperation.getDescription(), newOperation.getDescription(), context))
+          .ifPresent(changedOperation::setDescription);
     }
     builder
         .with(
@@ -113,15 +112,15 @@ public class OperationDiff {
               });
     }
 
-    if(!openApiDiff.getConfiguration().ignoreSecurity()) {
-        if (oldOperation.getSecurity() != null || newOperation.getSecurity() != null) {
-          builder
-              .with(
-                  openApiDiff
-                      .getSecurityRequirementsDiff()
-                      .diff(oldOperation.getSecurity(), newOperation.getSecurity(), context))
-              .ifPresent(changedOperation::setSecurityRequirements);
-        }        
+    if (!openApiDiff.getConfiguration().ignoreSecurity()) {
+      if (oldOperation.getSecurity() != null || newOperation.getSecurity() != null) {
+        builder
+            .with(
+                openApiDiff
+                    .getSecurityRequirementsDiff()
+                    .diff(oldOperation.getSecurity(), newOperation.getSecurity(), context))
+            .ifPresent(changedOperation::setSecurityRequirements);
+      }
     }
 
     builder

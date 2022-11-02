@@ -29,7 +29,8 @@ public class OpenApiDiffTest {
 
   @Test
   public void shouldCompareSmom4_1_andRC5() throws IOException {
-      OpenApiCompare.Configuration configuration = new OpenApiCompare.Configuration(true, true, true, ".*/q/.*");
+    OpenApiCompare.Configuration configuration =
+        new OpenApiCompare.Configuration(true, true, true, ".*/q/.*");
     ChangedOpenApi changedOpenApi =
         OpenApiCompare.fromLocations("openapi_4_1_org.yaml", "openapi_rc5_org.yaml", configuration);
     //            OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
@@ -59,7 +60,7 @@ public class OpenApiDiffTest {
     // TODO throw OOM
     //    new JsonRender().renderToFile(changedOpenApi, "smom_delta.json");
     // TODO leads to > 10GB files...
-        new YamlRender().renderToFile(changedOpenApi, "smom_delta.yaml");
+    new YamlRender().renderToFile(changedOpenApi, "smom_delta.yaml");
   }
 
   @Test

@@ -6,12 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ChangedExtensions implements ComposedChanged {
-    @JsonIgnore
-  private final Map<String, Object> oldExtensions;
-    @JsonIgnore
-  private final Map<String, Object> newExtensions;
-    @JsonIgnore
-  private final DiffContext context;
+  @JsonIgnore private final Map<String, Object> oldExtensions;
+  @JsonIgnore private final Map<String, Object> newExtensions;
+  @JsonIgnore private final DiffContext context;
   private Map<String, Changed> increased;
   private Map<String, Changed> missing;
   private Map<String, Changed> changed;

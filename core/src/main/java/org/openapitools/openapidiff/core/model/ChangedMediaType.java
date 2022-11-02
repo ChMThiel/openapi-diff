@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChangedMediaType implements ComposedChanged {
-    @JsonIgnore
-  private final Schema oldSchema;
-    @JsonIgnore
-  private final Schema newSchema;
-    @JsonIgnore
-  private final DiffContext context;
+  @JsonIgnore private final Schema oldSchema;
+  @JsonIgnore private final Schema newSchema;
+  @JsonIgnore private final DiffContext context;
   private ChangedSchema schema;
 
   public ChangedMediaType(Schema oldSchema, Schema newSchema, DiffContext context) {

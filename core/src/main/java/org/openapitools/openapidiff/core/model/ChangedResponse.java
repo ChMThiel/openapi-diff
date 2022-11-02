@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChangedResponse implements ComposedChanged {
-    @JsonIgnore
-  private final ApiResponse oldApiResponse;
-    @JsonIgnore
-  private final ApiResponse newApiResponse;
-    @JsonIgnore
-  private final DiffContext context;
+  @JsonIgnore private final ApiResponse oldApiResponse;
+  @JsonIgnore private final ApiResponse newApiResponse;
+  @JsonIgnore private final DiffContext context;
   private ChangedMetadata description;
   private ChangedHeaders headers;
   private ChangedContent content;
@@ -88,11 +85,11 @@ public class ChangedResponse implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedResponse that = (ChangedResponse) o;
-     boolean descEquals;
-    if(!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
-        descEquals = Objects.equals(description, that.description);
+    boolean descEquals;
+    if (!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
+      descEquals = Objects.equals(description, that.description);
     } else {
-        descEquals = true;
+      descEquals = true;
     }
     return Objects.equals(oldApiResponse, that.oldApiResponse)
         && Objects.equals(newApiResponse, that.newApiResponse)

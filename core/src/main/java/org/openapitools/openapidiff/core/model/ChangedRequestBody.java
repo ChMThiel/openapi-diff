@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChangedRequestBody implements ComposedChanged {
-    @JsonIgnore
-  private final RequestBody oldRequestBody;
-    @JsonIgnore
-  private final RequestBody newRequestBody;
-    @JsonIgnore
-  private final DiffContext context;
+  @JsonIgnore private final RequestBody oldRequestBody;
+  @JsonIgnore private final RequestBody newRequestBody;
+  @JsonIgnore private final DiffContext context;
   private boolean changeRequired;
   private ChangedMetadata description;
   private ChangedContent content;
@@ -91,11 +88,11 @@ public class ChangedRequestBody implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedRequestBody that = (ChangedRequestBody) o;
-     boolean descEquals;
-    if(!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
-        descEquals = Objects.equals(description, that.description);
+    boolean descEquals;
+    if (!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
+      descEquals = Objects.equals(description, that.description);
     } else {
-        descEquals = true;
+      descEquals = true;
     }
     return changeRequired == that.changeRequired
         && Objects.equals(oldRequestBody, that.oldRequestBody)
@@ -113,7 +110,7 @@ public class ChangedRequestBody implements ComposedChanged {
         newRequestBody,
         context,
         changeRequired,
-                getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
+        getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
         content,
         extensions);
   }

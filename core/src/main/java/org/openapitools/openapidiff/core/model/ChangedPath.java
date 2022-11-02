@@ -9,12 +9,9 @@ import java.util.stream.Stream;
 
 public class ChangedPath implements ComposedChanged {
   private final String pathUrl;
-  @JsonIgnore
-  private final PathItem oldPath;
-  @JsonIgnore
-  private final PathItem newPath;
-  @JsonIgnore
-  private final DiffContext context;
+  @JsonIgnore private final PathItem oldPath;
+  @JsonIgnore private final PathItem newPath;
+  @JsonIgnore private final DiffContext context;
   Map<PathItem.HttpMethod, Operation> increased;
   Map<PathItem.HttpMethod, Operation> missing;
   List<ChangedOperation> changed;

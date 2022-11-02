@@ -19,8 +19,7 @@ public class ParameterDiff extends ReferenceDiffCache<Parameter, ChangedParamete
   private static final RefPointer<Parameter> refPointer = new RefPointer<>(RefType.PARAMETERS);
   private final Components leftComponents;
   private final Components rightComponents;
-  @JsonIgnore
-  private final OpenApiDiff openApiDiff;
+  @JsonIgnore private final OpenApiDiff openApiDiff;
 
   public ParameterDiff(OpenApiDiff openApiDiff) {
     this.openApiDiff = openApiDiff;
@@ -65,13 +64,13 @@ public class ParameterDiff extends ReferenceDiffCache<Parameter, ChangedParamete
                 .getSchemaDiff()
                 .diff(left.getSchema(), right.getSchema(), context.copyWithRequired(true)))
         .ifPresent(changedParameter::setSchema);
-    if(!openApiDiff.getConfiguration().ignoreDescription()) {
-        builder
-            .with(
-                openApiDiff
-                    .getMetadataDiff()
-                    .diff(left.getDescription(), right.getDescription(), context))
-            .ifPresent(changedParameter::setDescription);
+    if (!openApiDiff.getConfiguration().ignoreDescription()) {
+      builder
+          .with(
+              openApiDiff
+                  .getMetadataDiff()
+                  .diff(left.getDescription(), right.getDescription(), context))
+          .ifPresent(changedParameter::setDescription);
     }
     builder
         .with(openApiDiff.getContentDiff().diff(left.getContent(), right.getContent(), context))

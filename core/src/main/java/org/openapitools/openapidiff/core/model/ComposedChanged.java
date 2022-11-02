@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 public interface ComposedChanged extends Changed {
 
   @NotNull
-          @JsonIgnore
+  @JsonIgnore
   List<Changed> getChangedElements();
 
   @NotNull

@@ -5,10 +5,8 @@ import io.swagger.v3.oas.models.PathItem;
 import java.util.*;
 
 public class ChangedPaths implements ComposedChanged {
-    @JsonIgnore
-  private final Map<String, PathItem> oldPathMap;
-    @JsonIgnore
-  private final Map<String, PathItem> newPathMap;
+  @JsonIgnore private final Map<String, PathItem> oldPathMap;
+  @JsonIgnore private final Map<String, PathItem> newPathMap;
   private Map<String, PathItem> increased;
   private Map<String, PathItem> missing;
   private Map<String, ChangedPath> changed;

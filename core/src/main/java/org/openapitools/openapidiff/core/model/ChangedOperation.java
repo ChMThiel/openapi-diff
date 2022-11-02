@@ -1,8 +1,8 @@
 package org.openapitools.openapidiff.core.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import static org.openapitools.openapidiff.core.model.Changed.result;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import java.util.Arrays;
@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChangedOperation implements ComposedChanged {
-    @JsonIgnore
-  private Operation oldOperation;
-    @JsonIgnore
-  private Operation newOperation;
+  @JsonIgnore private Operation oldOperation;
+  @JsonIgnore private Operation newOperation;
   private String pathUrl;
   private PathItem.HttpMethod httpMethod;
   private ChangedMetadata summary;
@@ -190,11 +188,15 @@ public class ChangedOperation implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedOperation that = (ChangedOperation) o;
-     boolean descEquals;
-    if(!that.getApiResponses().getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
-        descEquals = Objects.equals(description, that.description);
+    boolean descEquals;
+    if (!that.getApiResponses()
+        .getContext()
+        .getOpenApiDiff()
+        .getConfiguration()
+        .ignoreDescription()) {
+      descEquals = Objects.equals(description, that.description);
     } else {
-        descEquals = true;
+      descEquals = true;
     }
     return deprecated == that.deprecated
         && Objects.equals(oldOperation, that.oldOperation)
@@ -202,7 +204,7 @@ public class ChangedOperation implements ComposedChanged {
         && Objects.equals(pathUrl, that.pathUrl)
         && httpMethod == that.httpMethod
         && Objects.equals(summary, that.summary)
-            && descEquals
+        && descEquals
         && Objects.equals(operationId, that.operationId)
         && Objects.equals(parameters, that.parameters)
         && Objects.equals(requestBody, that.requestBody)
@@ -219,7 +221,9 @@ public class ChangedOperation implements ComposedChanged {
         pathUrl,
         httpMethod,
         summary,
-                getApiResponses().getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
+        getApiResponses().getContext().getOpenApiDiff().getConfiguration().ignoreDescription()
+            ? null
+            : description,
         operationId,
         deprecated,
         parameters,

@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChangedParameters implements ComposedChanged {
-    @JsonIgnore
-  private final List<Parameter> oldParameterList;
-    @JsonIgnore
-  private final List<Parameter> newParameterList;
-    @JsonIgnore
-  private final DiffContext context;
+  @JsonIgnore private final List<Parameter> oldParameterList;
+  @JsonIgnore private final List<Parameter> newParameterList;
+  @JsonIgnore private final DiffContext context;
   private List<Parameter> increased;
   private List<Parameter> missing;
   private List<ChangedParameter> changed;

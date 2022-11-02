@@ -130,10 +130,10 @@ public class ChangedHeader implements ComposedChanged {
     if (o == null || getClass() != o.getClass()) return false;
     ChangedHeader that = (ChangedHeader) o;
     boolean descEquals;
-    if(!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
-        descEquals = Objects.equals(description, that.description);
+    if (!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
+      descEquals = Objects.equals(description, that.description);
     } else {
-        descEquals = true;
+      descEquals = true;
     }
     return required == that.required
         && deprecated == that.deprecated
@@ -142,7 +142,7 @@ public class ChangedHeader implements ComposedChanged {
         && Objects.equals(oldHeader, that.oldHeader)
         && Objects.equals(newHeader, that.newHeader)
         && Objects.equals(context, that.context)
-            && descEquals
+        && descEquals
         && Objects.equals(schema, that.schema)
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);
@@ -158,7 +158,7 @@ public class ChangedHeader implements ComposedChanged {
         deprecated,
         style,
         explode,
-                getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
+        getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
         schema,
         content,
         extensions);

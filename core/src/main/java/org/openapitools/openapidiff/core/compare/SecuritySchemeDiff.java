@@ -1,8 +1,8 @@
 package org.openapitools.openapidiff.core.compare;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import static org.openapitools.openapidiff.core.utils.ChangedUtils.isChanged;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import java.util.HashSet;
@@ -15,8 +15,7 @@ import org.openapitools.openapidiff.core.model.deferred.DeferredChanged;
 import org.openapitools.openapidiff.core.model.deferred.RealizedChanged;
 
 public class SecuritySchemeDiff extends ReferenceDiffCache<SecurityScheme, ChangedSecurityScheme> {
-    @JsonIgnore
-  private final OpenApiDiff openApiDiff;
+  @JsonIgnore private final OpenApiDiff openApiDiff;
   private final Components leftComponents;
   private final Components rightComponents;
 
@@ -74,13 +73,12 @@ public class SecuritySchemeDiff extends ReferenceDiffCache<SecurityScheme, Chang
       DiffContext context) {
     ChangedSecurityScheme changedSecurityScheme =
         new ChangedSecurityScheme(leftSecurityScheme, rightSecurityScheme);
-      if (!openApiDiff.getConfiguration().ignoreDescription()) {
-          openApiDiff
-                  .getMetadataDiff()
-                  .diff(leftSecurityScheme.getDescription(), rightSecurityScheme.getDescription(),
-                          context)
-                  .ifPresent(changedSecurityScheme::setDescription);
-      }
+    if (!openApiDiff.getConfiguration().ignoreDescription()) {
+      openApiDiff
+          .getMetadataDiff()
+          .diff(leftSecurityScheme.getDescription(), rightSecurityScheme.getDescription(), context)
+          .ifPresent(changedSecurityScheme::setDescription);
+    }
     switch (leftSecurityScheme.getType()) {
       case APIKEY:
         changedSecurityScheme.setChangedIn(

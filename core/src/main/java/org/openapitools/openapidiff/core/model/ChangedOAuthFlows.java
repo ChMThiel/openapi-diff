@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChangedOAuthFlows implements ComposedChanged {
-    @JsonIgnore
-  private final OAuthFlows oldOAuthFlows;
-    @JsonIgnore
-  private final OAuthFlows newOAuthFlows;
+  @JsonIgnore private final OAuthFlows oldOAuthFlows;
+  @JsonIgnore private final OAuthFlows newOAuthFlows;
   private ChangedOAuthFlow implicitOAuthFlow;
   private ChangedOAuthFlow passwordOAuthFlow;
   private ChangedOAuthFlow clientCredentialOAuthFlow;
