@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.compare;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class ParameterDiff extends ReferenceDiffCache<Parameter, ChangedParamete
   private static final RefPointer<Parameter> refPointer = new RefPointer<>(RefType.PARAMETERS);
   private final Components leftComponents;
   private final Components rightComponents;
+  @JsonIgnore
   private final OpenApiDiff openApiDiff;
 
   public ParameterDiff(OpenApiDiff openApiDiff) {
@@ -63,13 +65,14 @@ public class ParameterDiff extends ReferenceDiffCache<Parameter, ChangedParamete
                 .getSchemaDiff()
                 .diff(left.getSchema(), right.getSchema(), context.copyWithRequired(true)))
         .ifPresent(changedParameter::setSchema);
-    // TODO ignore description
-    //    builder
-    //        .with(
-    //            openApiDiff
-    //                .getMetadataDiff()
-    //                .diff(left.getDescription(), right.getDescription(), context))
-    //        .ifPresent(changedParameter::setDescription);
+    if(!openApiDiff.getConfiguration().ignoreDescription()) {
+        builder
+            .with(
+                openApiDiff
+                    .getMetadataDiff()
+                    .diff(left.getDescription(), right.getDescription(), context))
+            .ifPresent(changedParameter::setDescription);
+    }
     builder
         .with(openApiDiff.getContentDiff().diff(left.getContent(), right.getContent(), context))
         .ifPresent(changedParameter::setContent);
