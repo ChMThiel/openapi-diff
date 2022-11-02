@@ -1,10 +1,12 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.PathItem;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.openapitools.openapidiff.core.compare.OpenApiDiff;
 
 public class DiffContext {
 
@@ -14,8 +16,11 @@ public class DiffContext {
   private boolean response;
   private boolean request;
   private Boolean required;
+  @JsonIgnore
+  private final OpenApiDiff openApiDiff;
 
-  public DiffContext() {
+  public DiffContext(OpenApiDiff aOpenApiDiff) {
+      openApiDiff = aOpenApiDiff;
     parameters = new HashMap<>();
     response = false;
     request = true;
@@ -76,7 +81,7 @@ public class DiffContext {
   }
 
   private DiffContext copy() {
-    DiffContext context = new DiffContext();
+    DiffContext context = new DiffContext(openApiDiff);
     context.url = this.url;
     context.parameters = this.parameters;
     context.method = this.method;
@@ -133,4 +138,9 @@ public class DiffContext {
         .append(required)
         .toHashCode();
   }
+
+    public OpenApiDiff getOpenApiDiff() {
+        return openApiDiff;
+    }
+  
 }

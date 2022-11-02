@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.compare;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
@@ -16,8 +17,9 @@ import org.openapitools.openapidiff.core.model.deferred.DeferredChanged;
 
 public class PathsDiff {
   private static final String REGEX_PATH = "\\{([^/{}]+)}";
+  @JsonIgnore
   private final OpenApiDiff openApiDiff;
-
+    
   public PathsDiff(OpenApiDiff openApiDiff) {
     this.openApiDiff = openApiDiff;
   }
@@ -44,7 +46,7 @@ public class PathsDiff {
     changedPaths.getIncreased().putAll(right);
 
     left.keySet().stream()
-        .filter(x -> !x.contains("/q/")) // no quarkus apis
+        .filter(x -> openApiDiff.getConfiguration().isMatchingPathRegex(x))
         .forEach(
             (String url) -> {
               PathItem leftPath = left.get(url);
@@ -83,7 +85,7 @@ public class PathsDiff {
                     params.put(oldParams.get(i), newParams.get(i));
                   }
                 }
-                DiffContext context = new DiffContext();
+                DiffContext context = new DiffContext(openApiDiff);
                 context.setUrl(url);
                 context.setParameters(params);
                 builder

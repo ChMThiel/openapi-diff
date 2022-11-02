@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.media.Schema;
 import java.util.*;
@@ -12,8 +13,11 @@ import org.openapitools.openapidiff.core.model.schema.ChangedRequired;
 import org.openapitools.openapidiff.core.model.schema.ChangedWriteOnly;
 
 public class ChangedSchema implements ComposedChanged {
+    @JsonIgnore
   protected DiffContext context;
+    @JsonIgnore
   protected Schema<?> oldSchema;
+    @JsonIgnore
   protected Schema<?> newSchema;
   protected String type;
   protected Map<String, ChangedSchema> changedProperties;
@@ -37,14 +41,19 @@ public class ChangedSchema implements ComposedChanged {
   private ChangedExtensions extensions;
 
   // Flags to avoid recursive calls to isChanged() and getChangedElements()
+  @JsonIgnore
   private boolean gettingChangedElements = false;
+  @JsonIgnore
   private boolean gettingIsChanged = false;
 
   // cached results for isChanged()
+  @JsonIgnore
   private DiffResult changed;
+  @JsonIgnore
   private DiffResult coreChanged;
 
   // cached results for getChangedElements()
+  @JsonIgnore
   private List<Changed> changedElements;
 
   public ChangedSchema() {
@@ -89,6 +98,7 @@ public class ChangedSchema implements ComposedChanged {
   }
 
   @Override
+  @JsonIgnore
   public List<Changed> getChangedElements() {
     if (gettingChangedElements) {
       return Collections.emptyList();
@@ -391,6 +401,12 @@ public class ChangedSchema implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedSchema that = (ChangedSchema) o;
+     boolean descEquals;
+    if(!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
+        descEquals = Objects.equals(description, that.description);
+    } else {
+        descEquals = true;
+    }
     return changeDeprecated == that.changeDeprecated
         && changeTitle == that.changeTitle
         && changeDefault == that.changeDefault
@@ -404,8 +420,7 @@ public class ChangedSchema implements ComposedChanged {
         && Objects.equals(changedProperties, that.changedProperties)
         && Objects.equals(increasedProperties, that.increasedProperties)
         && Objects.equals(missingProperties, that.missingProperties)
-        // TODO ignore description
-        //        && Objects.equals(description, that.description)
+            && descEquals
         && Objects.equals(required, that.required)
         && Objects.equals(enumeration, that.enumeration)
         && Objects.equals(readOnly, that.readOnly)
@@ -428,7 +443,7 @@ public class ChangedSchema implements ComposedChanged {
         increasedProperties,
         missingProperties,
         changeDeprecated,
-        //        description,
+                getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
         changeTitle,
         required,
         changeDefault,

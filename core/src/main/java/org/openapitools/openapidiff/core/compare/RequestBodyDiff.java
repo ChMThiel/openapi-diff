@@ -1,5 +1,6 @@
 package org.openapitools.openapidiff.core.compare;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import static java.util.Optional.ofNullable;
 
 import io.swagger.v3.oas.models.media.Content;
@@ -17,6 +18,7 @@ import org.openapitools.openapidiff.core.utils.RefType;
 public class RequestBodyDiff extends ReferenceDiffCache<RequestBody, ChangedRequestBody> {
   private static final RefPointer<RequestBody> refPointer =
       new RefPointer<>(RefType.REQUEST_BODIES);
+  @JsonIgnore
   private final OpenApiDiff openApiDiff;
 
   public RequestBodyDiff(OpenApiDiff openApiDiff) {
@@ -67,16 +69,17 @@ public class RequestBodyDiff extends ReferenceDiffCache<RequestBody, ChangedRequ
     ChangedRequestBody changedRequestBody =
         new ChangedRequestBody(oldRequestBody, newRequestBody, context)
             .setChangeRequired(leftRequired != rightRequired);
-    // TODO ignore description
-    //    builder
-    //        .with(
-    //            openApiDiff
-    //                .getMetadataDiff()
-    //                .diff(
-    //                    oldRequestBody != null ? oldRequestBody.getDescription() : null,
-    //                    newRequestBody != null ? newRequestBody.getDescription() : null,
-    //                    context))
-    //        .ifPresent(changedRequestBody::setDescription);
+    if(!openApiDiff.getConfiguration().ignoreDescription()) {
+        builder
+            .with(
+                openApiDiff
+                    .getMetadataDiff()
+                    .diff(
+                        oldRequestBody != null ? oldRequestBody.getDescription() : null,
+                        newRequestBody != null ? newRequestBody.getDescription() : null,
+                        context))
+            .ifPresent(changedRequestBody::setDescription);
+    }
     builder
         .with(openApiDiff.getContentDiff().diff(oldRequestContent, newRequestContent, context))
         .ifPresent(changedRequestBody::setContent);

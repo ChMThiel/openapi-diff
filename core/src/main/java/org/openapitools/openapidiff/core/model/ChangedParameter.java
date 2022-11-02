@@ -1,13 +1,17 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ChangedParameter implements ComposedChanged {
+    @JsonIgnore
   private final DiffContext context;
+    @JsonIgnore
   private Parameter oldParameter;
+    @JsonIgnore
   private Parameter newParameter;
   private String name;
   private String in;
@@ -176,6 +180,12 @@ public class ChangedParameter implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedParameter that = (ChangedParameter) o;
+     boolean descEquals;
+    if(!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
+        descEquals = Objects.equals(description, that.description);
+    } else {
+        descEquals = true;
+    }
     return changeRequired == that.changeRequired
         && deprecated == that.deprecated
         && changeStyle == that.changeStyle
@@ -186,8 +196,7 @@ public class ChangedParameter implements ComposedChanged {
         && Objects.equals(newParameter, that.newParameter)
         && Objects.equals(name, that.name)
         && Objects.equals(in, that.in)
-        // TODO ignore description
-        //        && Objects.equals(description, that.description)
+            && descEquals
         && Objects.equals(schema, that.schema)
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);
@@ -206,7 +215,7 @@ public class ChangedParameter implements ComposedChanged {
         changeStyle,
         changeExplode,
         changeAllowEmptyValue,
-        //        description,
+                getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
         schema,
         content,
         extensions);

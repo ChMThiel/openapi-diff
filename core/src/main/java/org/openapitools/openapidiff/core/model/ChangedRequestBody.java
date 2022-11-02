@@ -1,13 +1,17 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ChangedRequestBody implements ComposedChanged {
+    @JsonIgnore
   private final RequestBody oldRequestBody;
+    @JsonIgnore
   private final RequestBody newRequestBody;
+    @JsonIgnore
   private final DiffContext context;
   private boolean changeRequired;
   private ChangedMetadata description;
@@ -87,12 +91,17 @@ public class ChangedRequestBody implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedRequestBody that = (ChangedRequestBody) o;
+     boolean descEquals;
+    if(!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
+        descEquals = Objects.equals(description, that.description);
+    } else {
+        descEquals = true;
+    }
     return changeRequired == that.changeRequired
         && Objects.equals(oldRequestBody, that.oldRequestBody)
         && Objects.equals(newRequestBody, that.newRequestBody)
         && Objects.equals(context, that.context)
-        // TODO ignore description
-        //        && Objects.equals(description, that.description)
+        && descEquals
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);
   }
@@ -104,7 +113,7 @@ public class ChangedRequestBody implements ComposedChanged {
         newRequestBody,
         context,
         changeRequired,
-        //            description,
+                getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
         content,
         extensions);
   }

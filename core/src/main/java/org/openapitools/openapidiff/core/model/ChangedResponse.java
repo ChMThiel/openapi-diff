@@ -1,13 +1,17 @@
 package org.openapitools.openapidiff.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ChangedResponse implements ComposedChanged {
+    @JsonIgnore
   private final ApiResponse oldApiResponse;
+    @JsonIgnore
   private final ApiResponse newApiResponse;
+    @JsonIgnore
   private final DiffContext context;
   private ChangedMetadata description;
   private ChangedHeaders headers;
@@ -84,11 +88,16 @@ public class ChangedResponse implements ComposedChanged {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ChangedResponse that = (ChangedResponse) o;
+     boolean descEquals;
+    if(!that.getContext().getOpenApiDiff().getConfiguration().ignoreDescription()) {
+        descEquals = Objects.equals(description, that.description);
+    } else {
+        descEquals = true;
+    }
     return Objects.equals(oldApiResponse, that.oldApiResponse)
         && Objects.equals(newApiResponse, that.newApiResponse)
         && Objects.equals(context, that.context)
-        // TODO ignore description
-        //        && Objects.equals(description, that.description)
+        && descEquals
         && Objects.equals(headers, that.headers)
         && Objects.equals(content, that.content)
         && Objects.equals(extensions, that.extensions);
@@ -100,7 +109,7 @@ public class ChangedResponse implements ComposedChanged {
         oldApiResponse,
         newApiResponse,
         context,
-        //            description,
+        getContext().getOpenApiDiff().getConfiguration().ignoreDescription() ? null : description,
         headers,
         content,
         extensions);
