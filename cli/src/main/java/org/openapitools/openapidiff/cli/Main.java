@@ -21,6 +21,7 @@ import org.openapitools.openapidiff.core.model.ChangedOpenApi;
 import org.openapitools.openapidiff.core.output.ConsoleRender;
 import org.openapitools.openapidiff.core.output.HtmlRender;
 import org.openapitools.openapidiff.core.output.JsonRender;
+import org.openapitools.openapidiff.core.output.Markdown2HtmlRender;
 import org.openapitools.openapidiff.core.output.MarkdownRender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +97,14 @@ public class Main {
             .argName("file")
             .desc("export diff as html in given file")
             .build());
+    Option md2HtmlOption =
+        Option.builder()
+            .longOpt("md2html")
+            .hasArg()
+            .argName("file")
+            .desc("export diff as html with same content as markdown in given file")
+            .build();
+    options.addOption(md2HtmlOption);
     options.addOption(
         Option.builder()
             .longOpt("text")
@@ -110,6 +119,26 @@ public class Main {
             .argName("file")
             .desc("export diff as json in given file")
             .build());
+    Option ignoreDescriptionOption =
+        Option.builder().longOpt("ignoreDescriptions").desc("ignore changed descriptions").build();
+    options.addOption(ignoreDescriptionOption);
+    Option ignoreResponseHeaderOption =
+        Option.builder()
+            .longOpt("ignoreResponseHeaders")
+            .desc("ignore changed response headers")
+            .build();
+    options.addOption(ignoreResponseHeaderOption);
+    Option ignoreSecurityOption =
+        Option.builder().longOpt("ignoreSecurity").desc("ignore changed security options").build();
+    options.addOption(ignoreSecurityOption);
+    Option filterPathOption =
+        Option.builder()
+            .longOpt("filterPath")
+            .hasArg()
+            .argName("regex")
+            .desc("filter paths matching given regular expression")
+            .build();
+    options.addOption(filterPathOption);
 
     // create the parser
     CommandLineParser parser = new DefaultParser();
@@ -171,8 +200,18 @@ public class Main {
         String[] headers = line.getOptionValues("header");
         auths = Collections.singletonList(new AuthorizationValue(headers[0], headers[1], "header"));
       }
-
-      ChangedOpenApi result = OpenApiCompare.fromLocations(oldPath, newPath, auths);
+      boolean ignoreDescription = line.hasOption(ignoreDescriptionOption);
+      boolean ignoreResponseHeader = line.hasOption(ignoreResponseHeaderOption);
+      boolean ignoreSecurity = line.hasOption(ignoreSecurityOption);
+      String filterRegex =
+          line.hasOption(filterPathOption) ? line.getOptionValue(filterPathOption) : null;
+      ChangedOpenApi result =
+          OpenApiCompare.fromLocations(
+              oldPath,
+              newPath,
+              auths,
+              new OpenApiCompare.Configuration(
+                  ignoreSecurity, ignoreDescription, ignoreResponseHeader, filterRegex));
       ConsoleRender consoleRender = new ConsoleRender();
       if (!logLevel.equals("OFF")) {
         System.out.println(consoleRender.render(result));
@@ -181,6 +220,12 @@ public class Main {
         HtmlRender htmlRender = new HtmlRender();
         String output = htmlRender.render(result);
         String outputFile = line.getOptionValue("html");
+        writeOutput(output, outputFile);
+      }
+      if (line.hasOption("md2html")) {
+        Markdown2HtmlRender md2htmlRender = new Markdown2HtmlRender();
+        String output = md2htmlRender.render(result);
+        String outputFile = line.getOptionValue(md2HtmlOption);
         writeOutput(output, outputFile);
       }
       if (line.hasOption("markdown")) {
@@ -207,6 +252,7 @@ public class Main {
       } else if (line.hasOption("fail-on-changed")) {
         System.exit(result.isUnchanged() ? 0 : 1);
       }
+
     } catch (ParseException e) {
       // oops, something went wrong
       System.err.println("Parsing failed. Reason: " + e.getMessage());
