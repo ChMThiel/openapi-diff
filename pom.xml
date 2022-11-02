@@ -301,16 +301,28 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.22.2</version>
                 </plugin>
-<!--                <plugin>
+                <plugin>
                     <groupId>com.spotify.fmt</groupId>
                     <artifactId>fmt-maven-plugin</artifactId>
                     <version>2.19</version>
-                </plugin>-->
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.google.googlejavaformat</groupId>
+                            <artifactId>google-java-format</artifactId>
+                            <version>1.15.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
 <!--                <plugin>
+                    <groupId>com.coveo</groupId>
+                    <artifactId>fmt-maven-plugin</artifactId>
+                    <version>2.9.1</version>
+                </plugin>-->
+                <plugin>
                     <groupId>io.github.phillipuniverse</groupId>
                     <artifactId>githook-maven-plugin</artifactId>
                     <version>1.0.5</version>
-                </plugin>-->
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
@@ -359,7 +371,7 @@
                     <releaseProfiles>release</releaseProfiles>
                 </configuration>
             </plugin>
-<!--            <plugin>
+            <plugin>
                 <groupId>com.spotify.fmt</groupId>
                 <artifactId>fmt-maven-plugin</artifactId>
                 <executions>
@@ -369,8 +381,8 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
-<!--            <plugin>
+            </plugin>
+            <plugin>
                 <groupId>io.github.phillipuniverse</groupId>
                 <artifactId>githook-maven-plugin</artifactId>
                 <executions>
@@ -388,7 +400,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
