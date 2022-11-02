@@ -209,7 +209,8 @@ public class Markdown2HtmlRender implements Render {
              <body>
                HTML_HERE
              </body>
+           </html>
            """
-        + "</html>\n".replace("HTML_HERE", html);
+        .replace("HTML_HERE", html);
   }
 }
