@@ -8,7 +8,9 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.openapitools.openapidiff.core.OpenApiCompare;
 import org.openapitools.openapidiff.core.model.Changed;
 import org.openapitools.openapidiff.core.model.ChangedPaths;
 import org.openapitools.openapidiff.core.model.DiffContext;
@@ -41,10 +43,14 @@ public class PathsDiff {
       final Map<String, PathItem> left, final Map<String, PathItem> right) {
     DeferredBuilder<Changed> builder = new DeferredBuilder<>();
 
-    ChangedPaths changedPaths = new ChangedPaths(left, right);
-    changedPaths.getIncreased().putAll(right);
+    OpenApiCompare.Configuration configuration = openApiDiff.getConfiguration();
+    Map<String, PathItem> rightFiltered = filter(right, configuration);
+    Map<String, PathItem> leftFiltered = filter(left, configuration);
 
-    left.keySet().stream()
+    ChangedPaths changedPaths = new ChangedPaths(leftFiltered, rightFiltered);
+    changedPaths.getIncreased().putAll(rightFiltered);
+
+    leftFiltered.keySet().stream()
         .filter(x -> openApiDiff.getConfiguration().isMatchingPathRegex(x))
         .forEach(
             (String url) -> {
@@ -95,6 +101,13 @@ public class PathsDiff {
               }
             });
     return builder.buildIsChanged(changedPaths);
+  }
+
+  static Map<String, PathItem> filter(
+      final Map<String, PathItem> aMap, OpenApiCompare.Configuration aConfiguration) {
+    return aMap.entrySet().stream()
+        .filter(e -> aConfiguration.isMatchingPathRegex(e.getKey()))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   public static Paths valOrEmpty(Paths path) {

@@ -101,4 +101,16 @@ public class SecurityDiffTest {
         IllegalArgumentException.class,
         () -> OpenApiCompare.fromLocations(OPENAPI_DOC5, OPENAPI_DOC5));
   }
+
+  @Test
+  void shouldIgnoreSecurityChangedsIfConfigured() throws Exception {
+    // given
+    OpenApiCompare.Configuration configuration =
+        new OpenApiCompare.Configuration(true, false, false, null);
+    // when
+    ChangedOpenApi changedOpenApi =
+        OpenApiCompare.fromLocations(OPENAPI_DOC1, OPENAPI_DOC2, configuration);
+    // then
+    assertThat(changedOpenApi.getChangedOperations()).isEmpty();
+  }
 }

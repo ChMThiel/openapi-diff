@@ -31,4 +31,16 @@ public class ResponseHeaderDiffTest {
     assertThat(changedHeaders.getIncreased()).hasSize(1);
     assertThat(changedHeaders.getMissing()).hasSize(1);
   }
+
+  @Test
+  void shouldIgnoreHeaderDifferenceIfConfigured() throws Exception {
+    // given
+    OpenApiCompare.Configuration configuration =
+        new OpenApiCompare.Configuration(false, false, true, null);
+    // when
+    ChangedOpenApi changedOpenApi =
+        OpenApiCompare.fromLocations(OPENAPI_DOC1, OPENAPI_DOC2, configuration);
+    // then
+    assertThat(changedOpenApi.getChangedOperations()).isEmpty();
+  }
 }

@@ -15,7 +15,7 @@ info:
 paths:
   /pets/{id}:
     get:
-      description: Returns a user based on a single ID, if the user does not have access to the pet 
+      description: Returns a user based on a single ID, if the user does not have access to the pet CHANGED
       operationId: find pet by id
       parameters:
         - name: id
