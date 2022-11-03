@@ -12,9 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.openapitools.openapidiff.core.OpenApiCompare;
 import org.openapitools.openapidiff.core.model.ChangedOpenApi;
@@ -47,11 +44,6 @@ public class DeltaResource {
                                 "on".equals(aInput.ignoreResponseHeader),
                                 aInput.filterPath));
         String html = new Markdown2HtmlRender().render(result);
-        final java.nio.file.Path pathHtml = java.nio.file.Path.of("delta_view.html");
-        try ( FileWriter fw = new FileWriter(pathHtml.toFile())) {
-            log.info("Writing to file " + pathHtml);
-            fw.write(html);
-        }
         return Response.ok(html, MediaType.TEXT_HTML).build();
     }
 
