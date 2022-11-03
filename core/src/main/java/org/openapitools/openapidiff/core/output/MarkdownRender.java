@@ -460,13 +460,24 @@ public class MarkdownRender implements Render {
       DiffContext context) {
     StringBuilder sb = new StringBuilder();
     if (properties != null) {
-      properties.forEach(
-          (key, value) -> {
-            sb.append(resolveProperty(deepness, value, key, title));
-            if (showContent) {
-              sb.append(schema(deepness + 1, resolve(value), context));
-            }
-          });
+      properties.entrySet().stream()
+          //                    .filter(e -> {
+          //                        if (context.isRequest() && isReadOnly(e.getValue()) &&
+          // Set.of(PathItem.HttpMethod.PUT,
+          // PathItem.HttpMethod.POST).contains(context.getMethod())) {
+          //                            LOGGER.debug("Ignoring readOnly-property in request for
+          // "+context.getMethod()+" "+context.getUrl());
+          //                            return false;
+          //                        }
+          //                        return true;
+          //                    })
+          .forEach(
+              e -> {
+                sb.append(resolveProperty(deepness, e.getValue(), e.getKey(), title));
+                if (showContent) {
+                  sb.append(schema(deepness + 1, resolve(e.getValue()), context));
+                }
+              });
     }
     return sb.toString();
   }
@@ -477,6 +488,36 @@ public class MarkdownRender implements Render {
     } catch (Exception e) {
       return property(deepness, title, key, type(value), "");
     }
+  }
+
+  boolean isReadOnly(Schema aSchema) {
+    if (Boolean.TRUE.equals(aSchema.getReadOnly())) {
+      return true;
+    }
+    if (aSchema.getAllOf() != null) {
+      return ((List<Schema>) aSchema.getAllOf()).stream().anyMatch(this::isReadOnly);
+    }
+    return false;
+  }
+
+  boolean isNullable(Schema aSchema) {
+    if (Boolean.TRUE.equals(aSchema.getNullable())) {
+      return true;
+    }
+    if (aSchema.getAllOf() != null) {
+      return ((List<Schema>) aSchema.getAllOf()).stream().anyMatch(this::isNullable);
+    }
+    return false;
+  }
+
+  boolean isRequired(String aName, Schema aSchema) {
+    if (aSchema.getRequired() != null && aSchema.getRequired().contains(aName)) {
+      return true;
+    }
+    if (aSchema.getAllOf() != null) {
+      return ((List<Schema>) aSchema.getAllOf()).stream().anyMatch(s -> isRequired(aName, s));
+    }
+    return false;
   }
 
   protected String property(int deepness, String name, ChangedSchema schema) {
@@ -490,21 +531,21 @@ public class MarkdownRender implements Render {
       details.add("incompatible");
     }
     if (!Objects.equals(schema.getOldSchema().getNullable(), schema.getNewSchema().getNullable())) {
-      if (Boolean.TRUE.equals(schema.getNewSchema().getNullable())) {
+      if (isNullable(schema.getNewSchema())) {
         details.add("change to nullable");
       } else {
         details.add("change to not nullable");
       }
     }
     if (!Objects.equals(schema.getOldSchema().getReadOnly(), schema.getNewSchema().getReadOnly())) {
-      if (Boolean.TRUE.equals(schema.getNewSchema().getReadOnly())) {
+      if (isReadOnly(schema.getNewSchema())) {
         details.add("change to readOnly");
       } else {
         details.add("change to not readOnly");
       }
     }
     if (!Objects.equals(schema.getOldSchema().getRequired(), schema.getNewSchema().getRequired())) {
-      if (Boolean.TRUE.equals(schema.getNewSchema().getRequired())) {
+      if (isRequired(name, schema.getNewSchema())) {
         details.add("change to required");
       } else {
         details.add("change to not required");

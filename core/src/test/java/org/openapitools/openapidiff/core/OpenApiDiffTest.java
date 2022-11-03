@@ -57,10 +57,27 @@ public class OpenApiDiffTest {
     try (FileWriter fw = new FileWriter(pathMd.toFile())) {
       fw.write(render);
     }
-    // TODO throw OOM
-    //    new JsonRender().renderToFile(changedOpenApi, "smom_delta.json");
-    // TODO leads to > 10GB files...
     new YamlRender().renderToFile(changedOpenApi, "smom_delta.yaml");
+  }
+
+  @Test
+  public void shouldCompareHandlingUnits4_1_andRC5() throws IOException {
+    OpenApiCompare.Configuration configuration =
+        new OpenApiCompare.Configuration(true, true, true, ".*/q/.*");
+    ChangedOpenApi changedOpenApi =
+        OpenApiCompare.fromLocations(
+            "openapi_put_handlingunits_4_1.yaml",
+            "openapi_put_handlingunits_rc5.yaml",
+            configuration);
+    //            OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
+        assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
+      assertThat(changedOpenApi.isCompatible()).isTrue();
+    String md2Html = new Markdown2HtmlRender().render(changedOpenApi);
+    final Path pathMd2Html = Path.of("handlingUnit_delta.html");
+    try (FileWriter fw = new FileWriter(pathMd2Html.toFile())) {
+      log.info("Writing to file " + pathMd2Html);
+      fw.write(md2Html);
+    }
   }
 
   @Test

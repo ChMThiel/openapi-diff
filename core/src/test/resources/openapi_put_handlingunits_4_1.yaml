@@ -1,0 +1,171 @@
+---
+openapi: 3.0.3
+info:
+  title: Smart Manufacturing Operation Management Service API (development)
+  description: "Smart Manufacturing Operation Management Service provide a REST-API\
+    \ to access and modify the resources via restful API [GET, POST, PUT, DELETE,\
+    \ PATCH] using the path .../api/resources/...<BR>"
+  contact:
+    name: Contact and Support
+    url: https://gec.io/kontakt/
+    email: support@gec.io
+  license:
+    name: Commercial
+    url: https://gec.io/
+  version: 4.1.0
+security:
+- keycloak_auth: []
+tags: []
+paths:
+  /smartmom-svc/api/resources/handlingunits/{id}:
+    put:
+      tags:
+      - smom handlingunits resources (private)
+      summary: PRIVATE API update a Handling Unit
+      description: |
+        ### Required roles
+        * smom_admin
+        * smom_user
+      operationId: io.gec.smom.smom.handlingunit.boundary.HandlingUnitResource_update
+      parameters:
+      - name: X-PlantId
+        in: header
+        description: UUID of the Plant. If not set the user default Plant will be
+          used
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandlingUnit'
+#      responses:
+#        default:
+#          description: "All clients using the API have to be prepared that other Http-States\
+#            \ and failures might be reported as enlisted here. \nReturnCodes marked\
+#            \ with * can occure at runtime and define no specific object. \nAll apis\
+#            \ will return following json-body in case of an error and ResultHeader\
+#            \ in case of warnings."
+#          headers:
+#            Warning:
+#              $ref: '#/components/schemas/Warning'
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/GecFailure'
+#        "200":
+#          description: OK
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/HandlingUnit'
+#        "401":
+#          description: Not Authorized
+#        "403":
+#          description: Forbidden
+#        "400":
+#          $ref: '#/components/schemas/ResponseCodeMapping400'
+#        "422":
+#          $ref: '#/components/schemas/ResponseCodeMapping422'
+#        "412":
+#          $ref: '#/components/schemas/ResponseCodeMapping412'
+#        "500":
+#          $ref: '#/components/schemas/ResponseCodeMapping500'
+#        "404":
+#          $ref: '#/components/schemas/ResponseCodeMapping404'
+#        "405":
+#          $ref: '#/components/schemas/ResponseCodeMapping405'
+#        "417":
+#          $ref: '#/components/schemas/ResponseCodeMapping417'
+#        "406":
+#          $ref: '#/components/schemas/ResponseCodeMapping406'
+#        "409":
+#          $ref: '#/components/schemas/ResponseCodeMapping409'
+      security:
+      - keycloak_auth:
+        - smom_admin
+      - keycloak_auth:
+        - smom_admin
+        - smom_user
+components:
+  schemas:
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string
+    HandlingUnit:
+      description: HandlingUnit Entity. Updates to a HandlingUnit will be stored in
+        an audit-trail.
+      required:
+      - handlingUnitDefinitionId
+      type: object
+      properties:
+        created:
+          format: date-time
+          description: Date of creation
+          type: string
+          readOnly: true
+          example: 1970-01-01T00:00:00.0Z
+        description:
+          description: Description
+          type: string
+        handlingUnitDefinitionId:
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          - description: Reference to the HandlingUnitDefinition
+            nullable: false
+        hasAttribute:
+          description: True when the Entity has Attributes in the AttributeSystem
+          type: boolean
+          readOnly: true
+        hasDocuments:
+          description: True when the Entity has documents in the DocumentSystem
+          type: boolean
+          readOnly: true
+        id:
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          - description: "Unique Identifier of the entity. Required for updates. Generated\
+              \ on server-side, must not be given in creates."
+        info1:
+          description: Info Text 1
+          type: string
+        info2:
+          description: Info Text 2
+          type: string
+        info3:
+          description: Info Text 3
+          type: string
+        name:
+          description: Name has to be given on creation of the object and is not updatable
+            afterwards
+          type: string
+        payload:
+          description: Payload
+          type: string
+        plantId:
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          - description: "PlantId, references the plant the entity belongs to"
+            readOnly: true
+        singleVarietyRequired:
+          description: Single Variety Required
+          type: boolean
+        stamp:
+          format: date-time
+          description: Date of last change
+          type: string
+          readOnly: true
+          example: 1970-01-01T00:00:00.0Z
+        version:
+          format: int64
+          description: "Internal version of the entity, used for optimistic locking.\
+            \ Required for updates. Generated on server-side, must not be given in\
+            \ creates."
+          type: integer
+    

@@ -1,5 +1,7 @@
 package org.openapitools.openapidiff.core.model;
 
+import static java.util.function.Predicate.not;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.media.Schema;
@@ -156,10 +158,24 @@ public class ChangedSchema implements ComposedChanged {
   }
 
   private boolean compatibleForRequest() {
-    if (PathItem.HttpMethod.PUT.equals(context.getMethod()) && !increasedProperties.isEmpty()) {
+    List<String> newRequired = newSchema.getRequired();
+    if (Set.of(PathItem.HttpMethod.PUT, PathItem.HttpMethod.POST).contains(context.getMethod())
+        && !increasedProperties.values().stream()
+            .filter(e -> newRequired == null || newRequired.contains(e.getName()))
+            .noneMatch(not(this::isReadOnly))) {
       return false;
     }
     return (oldSchema != null || newSchema == null);
+  }
+
+  boolean isReadOnly(Schema aSchema) {
+    if (Boolean.TRUE.equals(aSchema.getReadOnly())) {
+      return true;
+    }
+    if (aSchema.getAllOf() != null) {
+      return ((List<Schema>) aSchema.getAllOf()).stream().anyMatch(this::isReadOnly);
+    }
+    return false;
   }
 
   public DiffContext getContext() {

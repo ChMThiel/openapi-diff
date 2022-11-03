@@ -1,0 +1,285 @@
+---
+openapi: 3.0.3
+info:
+  title: Smart Manufacturing Operation Management Service API (development)
+  description: "Smart Manufacturing Operation Management Service provide a REST-API\
+    \ to access and modify the resources via restful API [GET, POST, PUT, DELETE,\
+    \ PATCH] using the path .../api/resources/...<BR>"
+  contact:
+    name: Contact and Support
+    url: https://gec.io/kontakt/
+    email: support@gec.io
+  license:
+    name: Commercial
+    url: https://gec.io/
+  version: RC5
+tags: []
+paths:
+  /smartmom-svc/api/resources/handlingunits/{id}:
+    put:
+      tags:
+      - smom handlingunits resources (private)
+      summary: PRIVATE API update a Handling Unit
+      description: |2-
+
+        ### Required roles
+        * smom_admin
+        * smom_user
+      operationId: io.gec.smom.smom.handlingunit.boundary.HandlingUnitResource_update
+      parameters:
+      - $ref: '#/components/parameters/X-PlantId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandlingUnit'
+#      responses:
+#        default:
+#          $ref: '#/components/responses/default_response'
+#        "200":
+#          description: OK
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/HandlingUnit'
+#        "400":
+#          $ref: '#/components/responses/ResponseCodeMapping400'
+#        "401":
+#          description: Not Authorized
+#        "403":
+#          description: Forbidden
+#        "404":
+#          $ref: '#/components/responses/ResponseCodeMapping404'
+#        "405":
+#          $ref: '#/components/responses/ResponseCodeMapping405'
+#        "406":
+#          $ref: '#/components/responses/ResponseCodeMapping406'
+#        "409":
+#          $ref: '#/components/responses/ResponseCodeMapping409'
+#        "412":
+#          $ref: '#/components/responses/ResponseCodeMapping412'
+#        "417":
+#          $ref: '#/components/responses/ResponseCodeMapping417'
+#        "422":
+#          $ref: '#/components/responses/ResponseCodeMapping422'
+#        "500":
+#          $ref: '#/components/responses/ResponseCodeMapping500'
+      security:
+      - keycloak_auth:
+        - smom_admin
+        - smom_user
+components:
+  parameters:
+    X-PlantId:
+      name: X-PlantId
+      in: header
+      description: UUID of the Plant. If not set the user default Plant will be used
+      schema:
+        $ref: '#/components/schemas/UUID'
+  schemas:
+    QuantityVolume:
+      required:
+      - value
+      - unit
+      type: object
+      properties:
+        scale:
+          allOf:
+          - $ref: '#/components/schemas/Scale'
+          - default: ABSOLUTE
+        unit:
+          description: "Symbol of a unit for dimension Volume, see API /resources/gecunits/dimensions/Volume/units\
+            \ for valid units."
+          type: string
+        value:
+          type: number
+    QuantityMass:
+      required:
+      - value
+      - unit
+      type: object
+      properties:
+        scale:
+          allOf:
+          - $ref: '#/components/schemas/Scale'
+          - default: ABSOLUTE
+        unit:
+          description: "Symbol of a unit for dimension Mass, see API /resources/gecunits/dimensions/Mass/units\
+            \ for valid units."
+          type: string
+        value:
+          type: number
+    QuantityLength:
+      required:
+      - value
+      - unit
+      type: object
+      properties:
+        scale:
+          allOf:
+          - $ref: '#/components/schemas/Scale'
+          - default: ABSOLUTE
+        unit:
+          description: "Symbol of a unit for dimension Length, see API /resources/gecunits/dimensions/Length/units\
+            \ for valid units."
+          type: string
+        value:
+          type: number
+    QuantityDensity:
+      required:
+      - value
+      - unit
+      type: object
+      properties:
+        scale:
+          allOf:
+          - $ref: '#/components/schemas/Scale'
+          - default: ABSOLUTE
+        unit:
+          description: "Symbol of a unit for dimension Density, see API /resources/gecunits/dimensions/Density/units\
+            \ for valid units."
+          type: string
+        value:
+          type: number
+    QuantityArea:
+      required:
+      - value
+      - unit
+      type: object
+      properties:
+        scale:
+          allOf:
+          - $ref: '#/components/schemas/Scale'
+          - default: ABSOLUTE
+        unit:
+          description: "Symbol of a unit for dimension Area, see API /resources/gecunits/dimensions/Area/units\
+            \ for valid units."
+          type: string
+        value:
+          type: number
+    OffsetDateTime:
+      format: date-time
+      type: string
+      example: 2022-03-10T12:15:50-04:00
+    Scale:
+      enum:
+      - ABSOLUTE
+      - RELATIVE
+      type: string
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string
+    HandlingUnit:
+      description: HandlingUnit Entity. Updates to a HandlingUnit will be stored in
+        an audit-trail.
+      required:
+      - handlingUnitDefinitionId
+      type: object
+      properties:
+        area:
+          allOf:
+          - $ref: '#/components/schemas/QuantityArea'
+          - readOnly: true
+        created:
+          allOf:
+          - $ref: '#/components/schemas/OffsetDateTime'
+          - description: Date of creation
+            readOnly: true
+            example: 1970-01-01T00:00:00.0Z
+        density:
+          allOf:
+          - $ref: '#/components/schemas/QuantityDensity'
+          - readOnly: true
+        description:
+          description: Description
+          type: string
+        handlingUnitDefinitionId:
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          - description: Reference to the HandlingUnitDefinition
+        hasAttribute:
+          description: True when the Entity has Attributes in the AttributeSystem
+          type: boolean
+          readOnly: true
+        hasDocuments:
+          description: True when the Entity has documents in the DocumentSystem
+          type: boolean
+          readOnly: true
+        height:
+          allOf:
+          - $ref: '#/components/schemas/QuantityLength'
+          - description: must be greater than zero
+        id:
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          - description: "Unique Identifier of the entity. Required for updates. Generated\
+              \ on server-side, must not be given in creates."
+        info1:
+          description: Info Text 1
+          type: string
+        info2:
+          description: Info Text 2
+          type: string
+        info3:
+          description: Info Text 3
+          type: string
+        length:
+          allOf:
+          - $ref: '#/components/schemas/QuantityLength'
+          - description: must be greater than zero
+        name:
+          description: Name has to be given on creation of the object and is not updatable
+            afterwards
+          type: string
+        payload:
+          description: Payload
+          type: string
+        plantId:
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          - description: "PlantId, references the plant the entity belongs to"
+            readOnly: true
+        singleVarietyRequired:
+          description: Single Variety Required
+          type: boolean
+        stamp:
+          allOf:
+          - $ref: '#/components/schemas/OffsetDateTime'
+          - description: Date of last change
+            readOnly: true
+            example: 1970-01-01T00:00:00.0Z
+        storagePlaceId:
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          - description: Id of the StoragePlace. Is set when the Object is stored
+              via Storage Service
+            readOnly: true
+        storagePlaceName:
+          description: Name of the StoragePlace. Is set when the Object is stored
+            via Storage Service
+          type: string
+          readOnly: true
+        version:
+          format: int64
+          description: "Internal version of the entity, used for optimistic locking.\
+            \ Required for updates. Generated on server-side, must not be given in\
+            \ creates."
+          type: integer
+        volume:
+          allOf:
+          - $ref: '#/components/schemas/QuantityVolume'
+          - readOnly: true
+        weight:
+          allOf:
+          - $ref: '#/components/schemas/QuantityMass'
+          - description: must be greater than or equal to zero
+        width:
+          allOf:
+          - $ref: '#/components/schemas/QuantityLength'
+          - description: must be greater than zero
