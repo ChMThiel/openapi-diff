@@ -70,8 +70,8 @@ public class OpenApiDiffTest {
             "openapi_put_handlingunits_rc5.yaml",
             configuration);
     //            OpenApiCompare.fromLocations("openapi_rc5_org.yaml", "openapi_rc5_org.yaml");
-        assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
-      assertThat(changedOpenApi.isCompatible()).isTrue();
+    assertThat(changedOpenApi.getChangedElements()).isNotEmpty();
+    assertThat(changedOpenApi.isCompatible()).isTrue();
     String md2Html = new Markdown2HtmlRender().render(changedOpenApi);
     final Path pathMd2Html = Path.of("handlingUnit_delta.html");
     try (FileWriter fw = new FileWriter(pathMd2Html.toFile())) {
