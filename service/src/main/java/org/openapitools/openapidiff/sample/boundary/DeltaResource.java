@@ -1,7 +1,6 @@
 package org.openapitools.openapidiff.sample.boundary;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.enterprise.context.RequestScoped;
@@ -12,6 +11,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.openapitools.openapidiff.core.OpenApiCompare;
 import org.openapitools.openapidiff.core.model.ChangedOpenApi;
@@ -25,12 +28,16 @@ public class DeltaResource {
 
     private static final Logger log = LoggerFactory.getLogger(DeltaResource.class);
 
-    //TODO openapi
+    // TODO openapi
     @Operation(summary = "get difference between two openApi-files")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response find(@MultipartForm DeltaInput aInput)
-            throws IOException {
+    @RequestBody(
+            content = {
+                @Content(
+                        mediaType = javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA,
+                        schema = @Schema(implementation = DeltaInput.class))})
+    public Response find(@MultipartForm DeltaInput aInput) throws IOException {
         String oldFileContent = Files.readString(aInput.oldFile.toPath());
         String newFileContent = Files.readString(aInput.newFile.toPath());
         ChangedOpenApi result
@@ -49,18 +56,28 @@ public class DeltaResource {
 
     public static class DeltaInput {
 
+        @Schema(type = SchemaType.STRING, format = "binary", description = "the older version of an openApi-file")
         @FormParam("oldFile")
         public File oldFile;
+
+        @Schema(type = SchemaType.STRING, format = "binary", description = "the new version of an openApi-file")
         @FormParam("newFile")
         public File newFile;
+
+        @Schema(description = "ignore all PATHs in the openApiFile matching given regular expression", defaultValue = ".*/q/.*")
         @FormParam("filterPath")
         String filterPath;
+
+        @Schema(description = "ignore all description in delta-evaluation", enumeration = {"on", "off"}, required = true, defaultValue = "on")
         @FormParam("ignoreDescriptions")
         String ignoreDescriptions;
+
+        @Schema(description = "ignore all response header in delta-evaluation", enumeration = {"on", "off"}, required = true, defaultValue = "on")
         @FormParam("ignoreResponseHeader")
         String ignoreResponseHeader;
+
+        @Schema(description = "ignore all security-infos in delta-evaluation", enumeration = {"on", "off"}, required = true, defaultValue = "on")
         @FormParam("ignoreSecurity")
         String ignoreSecurity;
-
     }
 }
