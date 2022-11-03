@@ -461,16 +461,6 @@ public class MarkdownRender implements Render {
     StringBuilder sb = new StringBuilder();
     if (properties != null) {
       properties.entrySet().stream()
-          //                    .filter(e -> {
-          //                        if (context.isRequest() && isReadOnly(e.getValue()) &&
-          // Set.of(PathItem.HttpMethod.PUT,
-          // PathItem.HttpMethod.POST).contains(context.getMethod())) {
-          //                            LOGGER.debug("Ignoring readOnly-property in request for
-          // "+context.getMethod()+" "+context.getUrl());
-          //                            return false;
-          //                        }
-          //                        return true;
-          //                    })
           .forEach(
               e -> {
                 sb.append(resolveProperty(deepness, e.getValue(), e.getKey(), title));
