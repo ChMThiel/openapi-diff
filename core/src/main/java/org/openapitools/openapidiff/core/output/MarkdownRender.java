@@ -70,6 +70,8 @@ public class MarkdownRender implements Render {
             + " to "
             + diff.getNewSpecOpenApi().getInfo().getVersion()
             + "\n"
+            + CODE+diff.getConfiguration()+CODE
+            + "\n"
             + H3
             + "Table of contents\n"
             // TODO add only non-empty to TOC

@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.openapitools.openapidiff.core.OpenApiCompare;
 import org.openapitools.openapidiff.core.utils.EndpointUtils;
 
 public class ChangedOpenApi implements ComposedChanged {
   @JsonIgnore private OpenAPI oldSpecOpenApi;
   @JsonIgnore private OpenAPI newSpecOpenApi;
+  private OpenApiCompare.Configuration configuration;
   private List<Endpoint> newEndpoints;
   private List<Endpoint> missingEndpoints;
   private List<ChangedOperation> changedOperations;
@@ -148,5 +150,14 @@ public class ChangedOpenApi implements ComposedChanged {
         + ", changedExtensions="
         + this.getChangedExtensions()
         + ")";
+  }
+
+  public ChangedOpenApi setConfiguration(OpenApiCompare.Configuration aConfiguration) {
+    configuration = aConfiguration;
+    return this;
+  }
+
+  public OpenApiCompare.Configuration getConfiguration() {
+    return configuration;
   }
 }

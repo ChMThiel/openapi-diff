@@ -176,7 +176,8 @@ public class OpenApiDiff {
         .setOldSpecOpenApi(oldSpecOpenApi)
         .setChangedOperations(changedOperations)
         .setChangedExtensions(changedExtensions)
-        .setChangedSchemas(deferredSchemaCache.getChangedSchemas());
+        .setChangedSchemas(deferredSchemaCache.getChangedSchemas())
+        .setConfiguration(configuration);
   }
 
   public DeferredSchemaCache getDeferredSchemaCache() {
