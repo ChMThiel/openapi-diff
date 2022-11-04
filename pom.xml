@@ -83,7 +83,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
 
-        <swagger-parser.version>2.1.6</swagger-parser.version>
+        <swagger-parser.version>2.1.8</swagger-parser.version>
         <slf4j.version>2.0.3</slf4j.version>
     </properties>
 
@@ -289,7 +289,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.0-M6</version>
+                    <version>3.0.0-M7</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -331,7 +331,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>3.4.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
