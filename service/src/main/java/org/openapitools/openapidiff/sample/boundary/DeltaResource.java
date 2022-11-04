@@ -32,7 +32,6 @@ public class DeltaResource {
 
   private static final Logger log = LoggerFactory.getLogger(DeltaResource.class);
 
-  // TODO openapi
   @Operation(summary = "get difference between two openApi-files")
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
