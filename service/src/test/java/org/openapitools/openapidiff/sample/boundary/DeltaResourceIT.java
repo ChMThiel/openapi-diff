@@ -1,6 +1,5 @@
 package org.openapitools.openapidiff.sample.boundary;
 
-
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
